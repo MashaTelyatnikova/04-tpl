@@ -27,9 +27,18 @@ namespace JapaneseCrossword
             }
 
             var crosswordTemplateBuilder = new CrosswordTemplateBuilder();
-            var crossword = new CrosswordSolver(crosswordTemplateBuilder.BuildFromFile(inputFile));
-            var solutionStatus = crossword.Solve();
-            Console.WriteLine(solutionStatus);
+            
+            try
+            {
+                var crossword = new CrosswordSolver(crosswordTemplateBuilder.BuildFromFile(inputFile));
+                var solutionStatus = crossword.Solve();
+                Console.WriteLine(solutionStatus);
+            }
+            catch (ArgumentException exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+           
         }
     }
 }
