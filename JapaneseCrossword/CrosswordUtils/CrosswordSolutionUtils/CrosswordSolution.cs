@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
@@ -12,6 +13,11 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
 
         public CrosswordSolution(List<List<CrosswordSolutionCell>> crosswordCells, SolutionStatus status)
         {
+            if (crosswordCells == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             CrosswordCells = crosswordCells;
             Status = status;
 

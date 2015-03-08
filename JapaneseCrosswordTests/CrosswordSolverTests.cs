@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JapaneseCrossword.CrosswordUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils;
@@ -22,7 +23,8 @@ namespace JapaneseCrosswordTests
         {
             var crosword = new CrosswordSolver(builder.BuildFromFile(@"CrosswordSolver.TestFiles\IncorrectCrossword.txt"));
             var actualSolution = crosword.Solve();
-            var expectedSolution = new CrosswordSolution(null, SolutionStatus.IncorrectCrossword);
+            var expectedSolution = new CrosswordSolution(Enumerable.Empty<List<CrosswordSolutionCell>>().ToList(),
+                SolutionStatus.IncorrectCrossword);
 
             Assert.That(actualSolution, Is.EqualTo(expectedSolution));
         }
