@@ -1,4 +1,4 @@
-namespace JapaneseCrossword.CrosswordUtils
+namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
 {
     public enum SolutionStatus
     {

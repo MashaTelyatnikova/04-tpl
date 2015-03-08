@@ -1,4 +1,5 @@
-﻿using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils;
+﻿using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils;
 
 namespace JapaneseCrossword.CrosswordUtils
 {
@@ -10,9 +11,9 @@ namespace JapaneseCrossword.CrosswordUtils
             this.crosswordTemplate = crosswordTemplate;
         }
 
-        public SolutionStatus Solve()
+        public CrosswordSolution Solve()
         {
-            return SolutionStatus.Solved;
+            return null;
         }
     }
 }

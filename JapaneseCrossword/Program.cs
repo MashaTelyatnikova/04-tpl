@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using JapaneseCrossword.CrosswordUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils;
 
 namespace JapaneseCrossword
@@ -27,18 +29,19 @@ namespace JapaneseCrossword
             }
 
             var crosswordTemplateBuilder = new CrosswordTemplateBuilder();
-            
+
             try
             {
                 var crossword = new CrosswordSolver(crosswordTemplateBuilder.BuildFromFile(inputFile));
-                var solutionStatus = crossword.Solve();
-                Console.WriteLine(solutionStatus);
+                var crosswordSolution = crossword.Solve();
+
+                var crosswordSolutionVisualizer = new CrosswordSolutionVisualizer(outputFile);
+                crosswordSolutionVisualizer.Visualize(crosswordSolution);
             }
             catch (ArgumentException exception)
             {
                 Console.WriteLine(exception.Message);
             }
-           
         }
     }
 }

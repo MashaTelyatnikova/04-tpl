@@ -52,6 +52,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,18 +60,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrosswordUtils\Crossword.cs" />
-    <Compile Include="CrosswordSolver.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolution\CrosswordSolutionCell.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolution\CrosswordSolution.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolution\CrosswordSolutionVisualizer.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolution\SimpleCrosswordSolutionVisualizer.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolver.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplate.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\CrosswordTemplateBuilder.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateColumn.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateRow.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolution\ICrosswordSolutionVisualizer.cs" />
     <Compile Include="FileReaderUtils\FileReader.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\ICrosswordTemplateBuilder.cs" />
-    <Compile Include="ICrosswordSolver.cs" />
+    <Compile Include="CrosswordUtils\ICrosswordSolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CrosswordUtils\SolutionStatus.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolution\SolutionStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
