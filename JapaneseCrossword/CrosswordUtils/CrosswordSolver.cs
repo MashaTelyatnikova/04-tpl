@@ -2,10 +2,10 @@
 
 namespace JapaneseCrossword.CrosswordUtils
 {
-    public class Crossword
+    public class CrosswordSolver : ICrosswordSolver
     {
         private CrosswordTemplate crosswordTemplate;
-        public Crossword(CrosswordTemplate crosswordTemplate)
+        public CrosswordSolver(CrosswordTemplate crosswordTemplate)
         {
             this.crosswordTemplate = crosswordTemplate;
         }

@@ -9,7 +9,7 @@ namespace JapaneseCrossword.FileReaderUtils
     public class FileReader
     {
         private readonly TextReader fileReader;
-        private readonly Queue<string> words; 
+        private readonly Queue<string> words;
         public FileReader(string file)
         {
             this.fileReader = new StreamReader(file);
@@ -19,12 +19,17 @@ namespace JapaneseCrossword.FileReaderUtils
         public int? ReadNextInt()
         {
             if (words.Count == 0)
+            {
                 return null;
+            }
 
             int result;
             var word = words.Dequeue();
             if (!int.TryParse(word, out result))
+            {
                 return null;
+            }
+
             return result;
         }
 
@@ -34,14 +39,11 @@ namespace JapaneseCrossword.FileReaderUtils
             {
                 yield return ReadNextInt();
             }
-        } 
+        }
 
         public string ReadNextWord()
         {
-            if (words.Count == 0)
-                return null;
-
-            return words.Dequeue();
+            return words.Count == 0 ? null : words.Dequeue();
         }
 
         private IEnumerable<string> ReadWords()
@@ -49,11 +51,11 @@ namespace JapaneseCrossword.FileReaderUtils
             var buffer = new char[1024];
             while ((fileReader.ReadBlock(buffer, 0, 1024)) != 0)
             {
-                var result =  buffer.ToList()
+                var result = buffer.ToList()
                                     .Split(Char.IsWhiteSpace)
                                     .Select(x => x.ToDelimitedString(""))
                                     .Where(s => s != "");
-                
+
                 foreach (var word in result)
                 {
                     yield return word;

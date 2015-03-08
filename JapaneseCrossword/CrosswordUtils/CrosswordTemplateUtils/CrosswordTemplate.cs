@@ -16,7 +16,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils
 
         public override bool Equals(object obj)
         {
-            var other = (CrosswordTemplate) obj;
+            var other = (CrosswordTemplate)obj;
             return Rows.SequenceEqual(other.Rows) && Columns.SequenceEqual(other.Columns);
         }
     }

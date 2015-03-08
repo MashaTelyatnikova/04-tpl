@@ -11,7 +11,9 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTempl
         public CrosswordTemplate BuildFromFile(string fileName)
         {
             if (!File.Exists(fileName))
+            {
                 throw new ArgumentException("No file {0}", fileName);
+            }
 
 
             var fileReader = new FileReader(fileName);
@@ -26,19 +28,23 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTempl
             for (var i = 0; i < rowsCount; ++i)
             {
                 int? groupsCount = fileReader.ReadNextInt();
-                
+
                 if (groupsCount == null)
+                {
                     throw new ArgumentException("Incorrect file");
+                }
 
                 var groups = fileReader.ReadNextInts(groupsCount.Value);
 
                 var enumerable = groups as int?[] ?? groups.ToArray();
 
                 if (enumerable.Any(g => g == null))
+                {
                     throw new ArgumentException("Incorrect file");
+                }
 
 
-               yield return new CrosswordTemplateRow(enumerable.Select(g => g.Value).ToArray());
+                yield return new CrosswordTemplateRow(enumerable.Select(g => g.Value).ToArray());
             }
         }
 
@@ -51,15 +57,18 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTempl
                 int? groupsCount = fileReader.ReadNextInt();
 
                 if (groupsCount == null)
+                {
                     throw new ArgumentException("Incorrect file");
+                }
 
                 var groups = fileReader.ReadNextInts(groupsCount.Value);
 
                 var enumerable = groups as int?[] ?? groups.ToArray();
 
                 if (enumerable.Any(g => g == null))
+                {
                     throw new ArgumentException("Incorrect file");
-
+                }
 
                 yield return new CrosswordTemplateColumn(enumerable.Select(g => g.Value).ToArray());
             }
