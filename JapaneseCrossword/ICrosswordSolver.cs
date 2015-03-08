@@ -1,3 +1,5 @@
+using JapaneseCrossword.CrosswordUtils;
+
 namespace JapaneseCrossword
 {
     public interface ICrosswordSolver

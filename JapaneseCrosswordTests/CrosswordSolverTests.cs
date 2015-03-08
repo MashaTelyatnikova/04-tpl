@@ -1,4 +1,5 @@
 using System.IO;
+using JapaneseCrossword.CrosswordUtils;
 using NUnit.Framework;
 
 namespace JapaneseCrossword
