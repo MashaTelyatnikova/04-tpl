@@ -17,15 +17,15 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
             }
         }
 
-        private static char GetCharAtCell(CrosswordCell cell)
+        private static char GetCharAtCell(CrosswordSolutionCell solutionCell)
         {
-            switch (cell)
+            switch (solutionCell)
             {
-                case CrosswordCell.Empty:
+                case CrosswordSolutionCell.Empty:
                     {
                         return '.';
                     }
-                case CrosswordCell.Filled:
+                case CrosswordSolutionCell.Filled:
                     {
                         return '*';
                     }

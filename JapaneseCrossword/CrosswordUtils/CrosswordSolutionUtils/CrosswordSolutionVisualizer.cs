@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolution;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
 {
@@ -41,15 +40,15 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
             }
         }
 
-        private static void DrawCell(CrosswordCell cell, int i, int j, Graphics graphics)
+        private static void DrawCell(CrosswordSolutionCell solutionCell, int i, int j, Graphics graphics)
         {
-            if (cell == CrosswordCell.Filled)
+            if (solutionCell == CrosswordSolutionCell.Filled)
             {
 
                 graphics.FillRectangle(new SolidBrush(FilledCellColor), j * CellWidth, i * CellHeight, CellWidth, CellHeight);
                 graphics.DrawRectangle(new Pen(BorderColor, 1), j * CellWidth, i * CellHeight, CellWidth, CellHeight);
             }
-            else if (cell == CrosswordCell.Empty)
+            else if (solutionCell == CrosswordSolutionCell.Empty)
             {
                 graphics.FillRectangle(new SolidBrush(EmptyCellColor), j*CellWidth, i*CellHeight, CellWidth, CellHeight);
                 graphics.DrawRectangle(new Pen(BorderColor, 1), j*CellWidth, i*CellHeight, CellWidth, CellHeight);

@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace JapaneseCrosswordTests
 {
+    [TestFixture]
     public class CrosswordTemplateBuilderTests
     {
         private ICrosswordTemplateBuilder crosswordTemplateBuilder;
