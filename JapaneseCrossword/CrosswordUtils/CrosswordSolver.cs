@@ -38,7 +38,7 @@ namespace JapaneseCrossword.CrosswordUtils
             {
                 UpdateCrosswordCells();
             }
-            catch (ArgumentException exception)
+            catch (ArgumentException)
             {
                 return new CrosswordSolution(Enumerable.Empty<List<CrosswordSolutionCell>>().ToList(), SolutionStatus.IncorrectCrossword);
             }
@@ -53,7 +53,6 @@ namespace JapaneseCrossword.CrosswordUtils
             {
                 var rowsUpdated = UpdateLines(rowsForUpdating, LineType.Row);
                 var columnsUpdated = UpdateLines(columnsForUpdating, LineType.Column);
-                var solution = new CrosswordSolution(crosswordCells, SolutionStatus.PartiallySolved).ToString();
                 linesUpdated = rowsUpdated || columnsUpdated;
             }
         }
@@ -68,8 +67,6 @@ namespace JapaneseCrossword.CrosswordUtils
                     linesUpdated = true;
                     linesForUpdating[lineNumber] = false;
                     UpdateLine(lineNumber, type);
-                    var solution = new CrosswordSolution(crosswordCells, SolutionStatus.PartiallySolved).ToString();
-                    var d = 0;
                 }
             }
 
