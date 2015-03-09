@@ -51,8 +51,10 @@ namespace JapaneseCrossword.CrosswordUtils
             var linesUpdated = true;
             while (linesUpdated)
             {
-                linesUpdated = UpdateLines(rowsForUpdating, LineType.Row) ||
-                               UpdateLines(columnsForUpdating, LineType.Column);
+                var rowsUpdated = UpdateLines(rowsForUpdating, LineType.Row);
+                var columnsUpdated = UpdateLines(columnsForUpdating, LineType.Column);
+                var solution = new CrosswordSolution(crosswordCells, SolutionStatus.PartiallySolved).ToString();
+                linesUpdated = rowsUpdated || columnsUpdated;
             }
         }
 
@@ -66,6 +68,8 @@ namespace JapaneseCrossword.CrosswordUtils
                     linesUpdated = true;
                     linesForUpdating[lineNumber] = false;
                     UpdateLine(lineNumber, type);
+                    var solution = new CrosswordSolution(crosswordCells, SolutionStatus.PartiallySolved).ToString();
+                    var d = 0;
                 }
             }
 
@@ -98,11 +102,13 @@ namespace JapaneseCrossword.CrosswordUtils
 
             var maybeFilledCells = MoreEnumerable.Generate(false, k => k).Take(lineCells.Count).ToList();
             var maybeEmptyCells = MoreEnumerable.Generate(false, k => k).Take(lineCells.Count).ToList();
+
             var startBlock = 0;
             var startPosition = -1;
 
             if (TrySetBlock(lineCells, startPosition, startBlock, blocks, maybeFilledCells, maybeEmptyCells))
             {
+              
                 for (var k = 0; k < lineCells.Count; ++k)
                 {
                     if (lineCells[k] == CrosswordSolutionCell.Unclear && maybeFilledCells[k] ^ maybeEmptyCells[k])
@@ -120,8 +126,16 @@ namespace JapaneseCrossword.CrosswordUtils
                 {
                     for (var j = 0; j < lineCells.Count; ++j)
                     {
-                        if (lineCells[j] != CrosswordSolutionCell.Filled)
+                        if (lineCells[j] == CrosswordSolutionCell.Unclear)
+                        {
                             lineCells[j] = CrosswordSolutionCell.Empty;
+                            if (type == LineType.Row)
+                                columnsForUpdating[j] = true;
+                            else
+                            {
+                                rowsForUpdating[j] = true;
+                            }
+                        }
 
                     }
                 }
@@ -143,10 +157,14 @@ namespace JapaneseCrossword.CrosswordUtils
 
         private bool TrySetBlock(List<CrosswordSolutionCell> cells, int start, int blockNumber, List<int> blocks, List<bool> maybeFilledCells, List<bool> maybeEmptyCells)
         {
+
             for (var i = start; i >= 0 && i < blocks[blockNumber] + start; ++i)
             {
                 if (cells[i] == CrosswordSolutionCell.Empty)
+                {
                     return false;
+                }
+                    
             }
 
             if (blockNumber == blocks.Count - 1)
@@ -177,7 +195,7 @@ namespace JapaneseCrossword.CrosswordUtils
             var blockIsSet = false;
             for (;nextPosition < cells.Count - blocks[blockNumber + 1] + 1; ++nextPosition)
             {
-                if (start != -1 && cells[nextPosition - 1] == CrosswordSolutionCell.Filled)
+                if (nextPosition > 0 && cells[nextPosition - 1] == CrosswordSolutionCell.Filled)
                     break;
                 if (TrySetBlock(cells, nextPosition, blockNumber + 1, blocks, maybeFilledCells, maybeEmptyCells))
                 {
