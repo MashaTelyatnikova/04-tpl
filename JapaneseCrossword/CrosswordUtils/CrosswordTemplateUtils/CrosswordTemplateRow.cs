@@ -5,7 +5,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils
 {
     public class CrosswordTemplateRow
     {
-        private readonly List<int> groupsFilledCells;
+        public readonly List<int> groupsFilledCells;
         public CrosswordTemplateRow(params int[] groupsFilledCells)
         {
             this.groupsFilledCells = groupsFilledCells.ToList();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
 {
@@ -30,6 +31,44 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
             var other = (CrosswordSolution) obj;
             return Width == other.Width && Height == other.Height && Status == other.Status && CrosswordCells.Count == other.CrosswordCells.Count &&
                 CrosswordCells.Select((line, index) => line.SequenceEqual(other.CrosswordCells[index])).All(x => x);
+        }
+
+        public override string ToString()
+        {
+            var str = new StringBuilder();
+            foreach (var line in CrosswordCells)
+            {
+                foreach (var cell in line)
+                {
+                    str.Append(GetCharAtCell(cell));
+                }
+
+                str.Append("\n");
+            }
+            return str.ToString().Trim();
+        }
+
+        private static char GetCharAtCell(CrosswordSolutionCell solutionCell)
+        {
+            switch (solutionCell)
+            {
+                case CrosswordSolutionCell.Empty:
+                    {
+                        return '.';
+                    }
+                case CrosswordSolutionCell.Filled:
+                    {
+                        return '*';
+                    }
+                    case CrosswordSolutionCell.Unclear:
+                {
+                    return '?';
+                }
+                default:
+                    {
+                        throw new Exception();
+                    }
+            }
         }
     }
 }

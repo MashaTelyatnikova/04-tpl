@@ -63,13 +63,13 @@
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolutionCell.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolution.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolutionVisualizer.cs" />
-    <Compile Include="CrosswordUtils\CrosswordSolutionUtils\SimpleCrosswordSolutionVisualizer.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolver.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplate.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\CrosswordTemplateBuilder.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateColumn.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateRow.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\ICrosswordSolutionVisualizer.cs" />
+    <Compile Include="CrosswordUtils\LineType.cs" />
     <Compile Include="FileReaderUtils\FileReader.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\ICrosswordTemplateBuilder.cs" />
     <Compile Include="CrosswordUtils\ICrosswordSolver.cs" />

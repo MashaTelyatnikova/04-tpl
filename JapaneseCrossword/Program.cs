@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JapaneseCrossword.CrosswordUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils;
+using MoreLinq;
 
 namespace JapaneseCrossword
 {
@@ -37,6 +39,7 @@ namespace JapaneseCrossword
 
                 var crosswordSolutionVisualizer = new CrosswordSolutionVisualizer(outputFile);
                 crosswordSolutionVisualizer.Visualize(crosswordSolution);
+
             }
             catch (ArgumentException exception)
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using JapaneseCrossword.CrosswordUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
@@ -29,41 +30,23 @@ namespace JapaneseCrosswordTests
             Assert.That(actualSolution, Is.EqualTo(expectedSolution));
         }
 
-        [Test]
-        public void Solve_ForSimplyRightCrossword_ReturnCorrectSolution()
+        [TestCase(@"CrosswordSolver.TestFiles\SampleInput.txt", @"CrosswordSolver.TestFiles\SampleInput.Solved.txt")]
+        [TestCase(@"CrosswordSolver.TestFiles\Car.txt", @"CrosswordSolver.TestFiles\Car.Solved.txt")]
+        [TestCase(@"CrosswordSolver.TestFiles\Rabbit.txt", @"CrosswordSolver.TestFiles\Rabbit.Solved.txt")]
+        [TestCase(@"CrosswordSolver.TestFiles\Kettle.txt", @"CrosswordSolver.TestFiles\Kettle.Solved.txt")]
+        public void Solve_ForCorrectUnambiguousCrossword_ReturnCorrectSolution(string templateFile, string solutionFile)
         {
-            var crosword = new CrosswordSolver(builder.BuildFromFile(@"CrosswordSolver.TestFiles\SampleInput.txt"));
-            var actualSolution = crosword.Solve();
+            var crossword = new CrosswordSolver(builder.BuildFromFile(templateFile));
+            var expectedSolution = GetNormalTextFromFile(solutionFile);
+            var actualSolution = crossword.Solve();
 
-            var expectedSolution = new CrosswordSolution(
-                new List<List<CrosswordSolutionCell>>()
-                {
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled},
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled}
-                }, SolutionStatus.Solved);
-
-            Assert.That(actualSolution, Is.EqualTo(expectedSolution));
+            Assert.That(actualSolution.Status, Is.EqualTo(SolutionStatus.Solved));
+            Assert.That(actualSolution.ToString(), Is.EqualTo(expectedSolution));
         }
 
-        [Test]
-        public void Solve_ForCrosswordDescribingCar_ReturnCorrectSolution()
+        private static string GetNormalTextFromFile(string fileName)
         {
-            var crosword = new CrosswordSolver(builder.BuildFromFile(@"CrosswordSolver.TestFiles\Car.txt"));
-            var actualSolution = crosword.Solve();
-            var expectedSolution = new CrosswordSolution(
-                new List<List<CrosswordSolutionCell>>()
-                {
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Empty, CrosswordSolutionCell.Empty,CrosswordSolutionCell.Empty,CrosswordSolutionCell.Empty,CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled},
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Empty, CrosswordSolutionCell.Empty,CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled},
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Empty, CrosswordSolutionCell.Empty,CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled},
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled},
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled},
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled},
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Empty, CrosswordSolutionCell.Empty,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Empty,CrosswordSolutionCell.Empty,CrosswordSolutionCell.Empty,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Empty},
-                    new List<CrosswordSolutionCell>(){CrosswordSolutionCell.Empty, CrosswordSolutionCell.Empty,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Empty,CrosswordSolutionCell.Empty,CrosswordSolutionCell.Empty,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Filled,CrosswordSolutionCell.Empty}
-                }, SolutionStatus.Solved);
-
-            Assert.That(actualSolution, Is.EqualTo(expectedSolution));
+            return File.ReadAllText(fileName).Replace("\r", "").Trim();
         }
     }
 }

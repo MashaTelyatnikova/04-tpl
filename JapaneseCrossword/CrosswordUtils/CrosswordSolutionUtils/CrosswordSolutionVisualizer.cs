@@ -4,7 +4,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
 {
     class CrosswordSolutionVisualizer : ICrosswordSolutionVisualizer
     {
-        private string outputFile;
+        private readonly string outputFile;
         private const int CellWidth = 50;
         private const int CellHeight = 50;
         private static readonly Color BorderColor = Color.FromArgb(156, 156, 156);
@@ -42,22 +42,24 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
 
         private static void DrawCell(CrosswordSolutionCell solutionCell, int i, int j, Graphics graphics)
         {
-            if (solutionCell == CrosswordSolutionCell.Filled)
-            {
+            SolidBrush rectangleBrush;
+            var rectanglePen = new Pen(BorderColor, 1); 
 
-                graphics.FillRectangle(new SolidBrush(FilledCellColor), j * CellWidth, i * CellHeight, CellWidth, CellHeight);
-                graphics.DrawRectangle(new Pen(BorderColor, 1), j * CellWidth, i * CellHeight, CellWidth, CellHeight);
-            }
-            else if (solutionCell == CrosswordSolutionCell.Empty)
+            switch (solutionCell)
             {
-                graphics.FillRectangle(new SolidBrush(EmptyCellColor), j*CellWidth, i*CellHeight, CellWidth, CellHeight);
-                graphics.DrawRectangle(new Pen(BorderColor, 1), j*CellWidth, i*CellHeight, CellWidth, CellHeight);
+                case CrosswordSolutionCell.Filled:
+                    rectangleBrush= new SolidBrush(FilledCellColor);
+                    break;
+                case CrosswordSolutionCell.Empty:
+                    rectangleBrush = new SolidBrush(EmptyCellColor);
+                    break;
+                default:
+                    rectangleBrush = new SolidBrush(UnclearCellColor);
+                    break;
             }
-            else
-            {
-                graphics.FillRectangle(new SolidBrush(UnclearCellColor), j * CellWidth, i * CellHeight, CellWidth, CellHeight);
-                graphics.DrawRectangle(new Pen(BorderColor, 1), j * CellWidth, i * CellHeight, CellWidth, CellHeight);
-            }
+
+            graphics.FillRectangle(rectangleBrush, j * CellWidth, i * CellHeight, CellWidth, CellHeight);
+            graphics.DrawRectangle(rectanglePen, j * CellWidth, i * CellHeight, CellWidth, CellHeight);
         }
     }
 }
