@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;
 using NUnit.Framework;
 
@@ -47,7 +48,7 @@ namespace JapaneseCrosswordTests
             var updater =
                new CrosswordLineCellsUpdater(
                    new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear },
-                   new int[] { 2 });
+                   new[] { 2 });
 
             var actualUpdatedCells = updater.UpdateCells();
             var expectedUpdatedCells = new List<CrosswordSolutionCell>()
@@ -59,12 +60,13 @@ namespace JapaneseCrosswordTests
             Assert.That(expectedUpdatedCells, Is.EqualTo(actualUpdatedCells));
         }
 
+        [Test]
         public void UpdateCells_ForBlocksThatDoNotFitIntoLine_ThrowsArgumentException()
         {
             var updater =
                new CrosswordLineCellsUpdater(
                    new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Filled, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Unclear },
-                   new int[] { 1, 2 });
+                   new[] { 1, 2 });
 
             Assert.Throws<ArgumentException>(() => updater.UpdateCells());
         }
@@ -75,7 +77,7 @@ namespace JapaneseCrosswordTests
             var updater =
                new CrosswordLineCellsUpdater(
                    new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled },
-                   new int[] { 1 });
+                   new[] { 1 });
 
             Assert.Throws<ArgumentException>(() => updater.UpdateCells());
         }
@@ -87,7 +89,7 @@ namespace JapaneseCrosswordTests
                new CrosswordLineCellsUpdater(
                    new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear,
                        CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear },
-                   new int[] { 3 });
+                   new[] { 3 });
 
             var actualUpdatedCells = updater.UpdateCells();
             var expectedUpdatedCells = new List<CrosswordSolutionCell>()
@@ -107,7 +109,7 @@ namespace JapaneseCrosswordTests
             var updater =
                new CrosswordLineCellsUpdater(
                    new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Unclear },
-                   new int[] { 3 });
+                   new[] { 3 });
 
             var actualUpdatedCells = updater.UpdateCells();
             var expectedUpdatedCells = new List<CrosswordSolutionCell>()
@@ -127,7 +129,7 @@ namespace JapaneseCrosswordTests
             var updater =
                new CrosswordLineCellsUpdater(
                    new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Unclear },
-                   new int[] { 2, 1 });
+                   new[] { 2, 1 });
 
             var actualUpdatedCells = updater.UpdateCells();
             var expectedUpdatedCells = new List<CrosswordSolutionCell>()
@@ -148,7 +150,7 @@ namespace JapaneseCrosswordTests
             var updater =
                new CrosswordLineCellsUpdater(
                    new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear },
-                   new int[] {3 });
+                   new[] {3 });
 
             var actualUpdatedCells = updater.UpdateCells();
             var expectedUpdatedCells = new List<CrosswordSolutionCell>()

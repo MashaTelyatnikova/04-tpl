@@ -17,34 +17,21 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordBuilder
                 throw new ArgumentException("No file {0}", file);
             }
 
+            var lines = new List<CrosswordLine>();
 
             var fileReader = new FileReader(file);
             var height = fileReader.ReadNextInt();
-
-            var lines = new List<CrosswordLine>();
-            for (var i = 0; i < height; ++i)
-            {
-                int? blocksCount = fileReader.ReadNextInt();
-
-                if (blocksCount == null)
-                {
-                    throw new ArgumentException("Incorrect file");
-                }
-
-                var blocks = fileReader.ReadNextInts(blocksCount.Value);
-
-                var enumerable = blocks as List<int?> ?? blocks.ToList();
-
-                if (enumerable.Any(g => g == null))
-                {
-                    throw new ArgumentException("Incorrect file");
-                }
-
-                lines.Add(new CrosswordLine(i, CrosswordLineType.Row, enumerable.Select(e => e.Value).ToArray()));
-            }
+            lines.AddRange(GetNextLines(height.GetValueOrDefault(), CrosswordLineType.Row, fileReader));
 
             var width = fileReader.ReadNextInt();
-            for (var i = 0; i < width; ++i)
+            lines.AddRange(GetNextLines(width.GetValueOrDefault(), CrosswordLineType.Column, fileReader));
+            return new Crossword(lines);
+
+        }
+
+        private IEnumerable<CrosswordLine> GetNextLines(int count, CrosswordLineType type, FileReader fileReader)
+        {
+            for (var i = 0; i < count; ++i)
             {
                 int? blocksCount = fileReader.ReadNextInt();
 
@@ -62,11 +49,8 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordBuilder
                     throw new ArgumentException("Incorrect file");
                 }
 
-                lines.Add(new CrosswordLine(i, CrosswordLineType.Column, enumerable.Select(e => e.Value).ToArray()));
+                yield return new CrosswordLine(i, type, enumerable.Select(e => e.GetValueOrDefault()).ToArray());
             }
-
-            return new Crossword(lines);
-
         }
     }
 }

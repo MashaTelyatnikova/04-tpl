@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Interfaces;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
@@ -50,14 +51,20 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
             switch (solutionCell)
             {
                 case CrosswordSolutionCell.Filled:
-                    rectangleBrush= new SolidBrush(FilledCellColor);
+                {
+                    rectangleBrush = new SolidBrush(FilledCellColor);
                     break;
+                }
                 case CrosswordSolutionCell.Empty:
+                {
                     rectangleBrush = new SolidBrush(EmptyCellColor);
                     break;
+                }
                 default:
+                {
                     rectangleBrush = new SolidBrush(UnclearCellColor);
                     break;
+                }
             }
 
             crosswordSolutionGraphics.FillRectangle(rectangleBrush, y * CellWidth, x * CellHeight, CellWidth, CellHeight);

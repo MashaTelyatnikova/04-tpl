@@ -10,12 +10,13 @@ namespace JapaneseCrossword.CrosswordUtils
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        private IEnumerable<CrosswordLine> lines;
+        private readonly IEnumerable<CrosswordLine> lines;
         public Crossword(IEnumerable<CrosswordLine> lines)
         {
-           if (lines == null)
-               throw new ArgumentNullException();
-            
+            lines = lines as List<CrosswordLine> ?? lines.ToList();
+            if (lines == null)
+                throw new ArgumentNullException();
+
             Width = lines.Count(line => line.Type == CrosswordLineType.Column);
             Height = lines.Count(line => line.Type == CrosswordLineType.Row);
             this.lines = lines;
@@ -28,8 +29,19 @@ namespace JapaneseCrossword.CrosswordUtils
 
         public override bool Equals(object obj)
         {
-            var other = (Crossword) obj;
+            var other = (Crossword)obj;
             return Width == other.Width && Height == other.Height && lines.SequenceEqual(other.lines);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (lines != null ? lines.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Width;
+                hashCode = (hashCode * 397) ^ Height;
+                return hashCode;
+            }
         }
     }
 }

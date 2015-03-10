@@ -63,7 +63,7 @@
     <Compile Include="CrosswordUtils\Crossword.cs" />
     <Compile Include="CrosswordUtils\CrosswordBuilder\CrosswordBuilder.cs" />
     <Compile Include="CrosswordUtils\CrosswordBuilder\Interfaces\ICrosswordBuilder.cs" />
-    <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolutionCell.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolutionUtils\Enums\CrosswordSolutionCell.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolution.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolutionVisualizer.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\CrosswordLineCellsUpdater.cs" />

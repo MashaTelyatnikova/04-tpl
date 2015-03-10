@@ -17,7 +17,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 
         public CrosswordSolution Solve(Crossword crosswordParam)
         {
-            this.Crossword = crosswordParam;
+            Crossword = crosswordParam;
             crosswordCells = Enumerable.Range(0, Crossword.Height)
                                         .Select(i => Enumerable.Range(0, Crossword.Width)
                                                                 .Select(j => CrosswordSolutionCell.Unclear).ToList()
@@ -49,6 +49,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
             {
                 var rowsUpdated = UpdateLines(rowsForUpdating, CrosswordLineType.Row);
                 var columnsUpdated = UpdateLines(columnsForUpdating, CrosswordLineType.Column);
+                
                 linesUpdated = rowsUpdated || columnsUpdated;
             }
         }
@@ -84,20 +85,32 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
                 if (line.Type == CrosswordLineType.Row)
                 {
                     if (currentLineCells[i] != updatedLineCells[i])
+                    {
                         lock (columnsForUpdating)
+                        {
                             columnsForUpdating[i] = true;
+                        }
+                    }
 
                     lock (crosswordCells)
+                    {
                         crosswordCells[line.Number][i] = updatedLineCells[i];
+                    }
                 }
                 else
                 {
                     if (currentLineCells[i] != updatedLineCells[i])
+                    {
                         lock (rowsForUpdating)
+                        {
                             rowsForUpdating[i] = true;
+                        }
+                    }
 
                     lock (crosswordCells)
+                    {
                         crosswordCells[i][line.Number] = updatedLineCells[i];
+                    }
                 }
             }
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
 using MoreLinq;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
@@ -99,7 +99,9 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
             for (; nextPosition < lineCells.Count - blocks[blockNumber + 1] + 1; ++nextPosition)
             {
                 if (nextPosition > 0 && lineCells[nextPosition - 1] == CrosswordSolutionCell.Filled)
+                {
                     break;
+                }
                 if (TrySetBlock(nextPosition, blockNumber + 1))
                 {
                     var i = start >= 0 ? start : 0;

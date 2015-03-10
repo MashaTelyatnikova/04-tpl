@@ -13,7 +13,8 @@ namespace JapaneseCrosswordTests
         [Test]
         public void Test1()
         {
-            Assert.Throws<ArgumentNullException>(() => new Crossword( null));
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<ArgumentNullException>(() => { new Crossword(null); });
         }
 
         [Test]

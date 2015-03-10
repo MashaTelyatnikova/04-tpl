@@ -30,23 +30,37 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
         public override bool Equals(object obj)
         {
             var other = (CrosswordSolution) obj;
-            return Width == other.Width && Height == other.Height && Status == other.Status && CrosswordCells.Count == other.CrosswordCells.Count &&
+            return Width == other.Width && Height == other.Height && Status == other.Status
+                && CrosswordCells.Count == other.CrosswordCells.Count &&
                 CrosswordCells.Select((line, index) => line.SequenceEqual(other.CrosswordCells[index])).All(x => x);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (CrosswordCells != null ? CrosswordCells.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (int)Status;
+                hashCode = (hashCode * 397) ^ Width;
+                hashCode = (hashCode * 397) ^ Height;
+                return hashCode;
+            }
         }
 
         public override string ToString()
         {
-            var str = new StringBuilder();
+            var result = new StringBuilder();
             foreach (var line in CrosswordCells)
             {
                 foreach (var cell in line)
                 {
-                    str.Append(GetCharAtCell(cell));
+                    result.Append(GetCharAtCell(cell));
                 }
 
-                str.Append("\n");
+                result.Append("\n");
             }
-            return str.ToString().Trim();
+
+            return result.ToString().Trim();
         }
 
         private static char GetCharAtCell(CrosswordSolutionCell solutionCell)
