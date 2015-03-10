@@ -63,19 +63,21 @@
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolutionCell.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolution.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolutionVisualizer.cs" />
-    <Compile Include="CrosswordUtils\CrosswordSolver.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolverUtils\CrosswordSolver.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplate.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\CrosswordTemplateBuilder.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateColumn.cs" />
     <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateRow.cs" />
-    <Compile Include="CrosswordUtils\CrosswordSolutionUtils\ICrosswordSolutionVisualizer.cs" />
-    <Compile Include="CrosswordUtils\LineType.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolutionUtils\Interfaces\ICrosswordSolutionVisualizer.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolverUtils\Enums\LineType.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolverUtils\SingleThreadedCrosswordSolver.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolverUtils\MultiThreadedCrosswordSolver.cs" />
     <Compile Include="FileReaderUtils\FileReader.cs" />
-    <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\ICrosswordTemplateBuilder.cs" />
-    <Compile Include="CrosswordUtils\ICrosswordSolver.cs" />
+    <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\Interfaces\ICrosswordTemplateBuilder.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolverUtils\Interfaces\ICrosswordSolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CrosswordUtils\CrosswordSolutionUtils\SolutionStatus.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolutionUtils\Enums\SolutionStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

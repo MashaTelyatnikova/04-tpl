@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils.Interfaces;
 using NUnit.Framework;
 
 namespace JapaneseCrosswordTests

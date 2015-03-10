@@ -1,4 +1,4 @@
-﻿namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
+﻿namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Interfaces
 {
     public interface ICrosswordSolutionVisualizer
     {

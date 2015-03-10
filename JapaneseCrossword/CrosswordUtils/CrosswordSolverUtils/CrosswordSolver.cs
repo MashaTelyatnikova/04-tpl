@@ -2,34 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Enums;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Interfaces;
 using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils;
 using MoreLinq;
 
-namespace JapaneseCrossword.CrosswordUtils
+namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 {
-    public class CrosswordSolver : ICrosswordSolver
+    public abstract class CrosswordSolver : ICrosswordSolver
     {
-        private readonly CrosswordTemplate crosswordTemplate;
+        private CrosswordTemplate crosswordTemplate;
         private List<List<CrosswordSolutionCell>> crosswordCells;
         private List<bool> rowsForUpdating;
         private List<bool> columnsForUpdating;
 
-        public CrosswordSolver(CrosswordTemplate crosswordTemplate)
+        public CrosswordSolution Solve(CrosswordTemplate crosswordTemplateParam)
         {
-            this.crosswordTemplate = crosswordTemplate;
-        }
-
-        public CrosswordSolution Solve()
-        {
-            crosswordCells = Enumerable.Range(0, crosswordTemplate.Height)
-                                        .Select(i => Enumerable.Range(0, crosswordTemplate.Width)
+            crosswordTemplate = crosswordTemplateParam;
+            crosswordCells = Enumerable.Range(0, crosswordTemplateParam.Height)
+                                        .Select(i => Enumerable.Range(0, crosswordTemplateParam.Width)
                                                                 .Select(j => CrosswordSolutionCell.Unclear).ToList()
                                         ).ToList();
 
-            rowsForUpdating = Enumerable.Range(0, crosswordTemplate.Height)
+            rowsForUpdating = Enumerable.Range(0, crosswordTemplateParam.Height)
                                     .Select(i => true)
                                     .ToList();
-            columnsForUpdating = Enumerable.Range(0, crosswordTemplate.Width)
+            columnsForUpdating = Enumerable.Range(0, crosswordTemplateParam.Width)
                                     .Select(i => true)
                                     .ToList();
 
@@ -57,28 +56,14 @@ namespace JapaneseCrossword.CrosswordUtils
             }
         }
 
-        private bool UpdateLines(List<bool> linesForUpdating, LineType type)
-        {
-            var linesUpdated = false;
-            for (var lineNumber = 0; lineNumber < linesForUpdating.Count; ++lineNumber)
-            {
-                if (linesForUpdating[lineNumber])
-                {
-                    linesUpdated = true;
-                    linesForUpdating[lineNumber] = false;
-                    UpdateLine(lineNumber, type);
-                }
-            }
-
-            return linesUpdated;
-        }
+        protected abstract bool UpdateLines(List<bool> linesForUpdating, LineType type);
 
         private bool CrosswordFilled()
         {
             return !crosswordCells.Any(line => line.Contains(CrosswordSolutionCell.Unclear));
         }
 
-        private void UpdateLine(int lineNumber, LineType type)
+        protected void UpdateLine(int lineNumber, LineType type)
         {
             var blocks = new List<int>() { 1 };
             var lineCells = new List<CrosswordSolutionCell>();
@@ -111,10 +96,12 @@ namespace JapaneseCrossword.CrosswordUtils
                     if (lineCells[k] == CrosswordSolutionCell.Unclear && maybeFilledCells[k] ^ maybeEmptyCells[k])
                     {
                         if (type == LineType.Row)
-                            columnsForUpdating[k] = true;
+                            lock(columnsForUpdating)
+                                columnsForUpdating[k] = true;
                         else
                         {
-                            rowsForUpdating[k] = true;
+                            lock(rowsForUpdating)
+                                rowsForUpdating[k] = true;
                         }
                         lineCells[k] = maybeFilledCells[k] ? CrosswordSolutionCell.Filled : CrosswordSolutionCell.Empty;
                     }
@@ -127,10 +114,14 @@ namespace JapaneseCrossword.CrosswordUtils
                         {
                             lineCells[j] = CrosswordSolutionCell.Empty;
                             if (type == LineType.Row)
-                                columnsForUpdating[j] = true;
+                            {
+                                lock(columnsForUpdating)
+                                    columnsForUpdating[j] = true;
+                            }
                             else
                             {
-                                rowsForUpdating[j] = true;
+                                lock(rowsForUpdating)
+                                    rowsForUpdating[j] = true;
                             }
                         }
 
@@ -138,12 +129,16 @@ namespace JapaneseCrossword.CrosswordUtils
                 }
                 for (var i = 0; i < lineCells.Count; ++i)
                 {
-                    if (type == LineType.Row)
-                        crosswordCells[lineNumber][i] = lineCells[i];
-                    else
+                    lock (crosswordCells)
                     {
-                        crosswordCells[i][lineNumber] = lineCells[i];
+                        if (type == LineType.Row)
+                            crosswordCells[lineNumber][i] = lineCells[i];
+                        else
+                        {
+                            crosswordCells[i][lineNumber] = lineCells[i];
+                        }
                     }
+                    
                 }
             }
             else

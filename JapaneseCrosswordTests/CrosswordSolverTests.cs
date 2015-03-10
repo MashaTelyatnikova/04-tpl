@@ -3,7 +3,11 @@ using System.IO;
 using System.Linq;
 using JapaneseCrossword.CrosswordUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Interfaces;
 using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils.Interfaces;
 using NUnit.Framework;
 
 namespace JapaneseCrosswordTests
@@ -12,22 +16,26 @@ namespace JapaneseCrosswordTests
     public class CrosswordSolverTests
     {
         private ICrosswordTemplateBuilder builder;
-
+        private List<ICrosswordSolver> crosswordSolvers;
+            
         [SetUp]
         public void SetUp()
         {
             builder = new CrosswordTemplateBuilder();
+            crosswordSolvers = new List<ICrosswordSolver>(){new SingleThreadedCrosswordSolver(), new MultiThreadedCrosswordSolver()};
         }
 
         [Test]
         public void Solve_ForIncorrectCrossword_ReturnCorrectSolution()
         {
-            var crosword = new CrosswordSolver(builder.BuildFromFile(@"CrosswordSolver.TestFiles\IncorrectCrossword.txt"));
-            var actualSolution = crosword.Solve();
+            var crosswordTemplate = builder.BuildFromFile(@"CrosswordSolver.TestFiles\IncorrectCrossword.txt");
             var expectedSolution = new CrosswordSolution(Enumerable.Empty<List<CrosswordSolutionCell>>().ToList(),
                 SolutionStatus.IncorrectCrossword);
 
-            Assert.That(actualSolution, Is.EqualTo(expectedSolution));
+            foreach (var actualSolution in crosswordSolvers.Select(solver => solver.Solve(crosswordTemplate)))
+            {
+                Assert.That(actualSolution, Is.EqualTo(expectedSolution));
+            }
         }
 
         [TestCase(@"CrosswordSolver.TestFiles\SampleInput.txt", @"CrosswordSolver.TestFiles\SampleInput.Solved.txt")]
@@ -38,24 +46,28 @@ namespace JapaneseCrosswordTests
         [TestCase(@"CrosswordSolver.TestFiles\Flower.txt", @"CrosswordSolver.TestFiles\Flower.Solved.txt")]
         public void Solve_ForCorrectUnambiguousCrossword_ReturnCorrectSolution(string templateFile, string solutionFile)
         {
-            var crossword = new CrosswordSolver(builder.BuildFromFile(templateFile));
+            var crosswordTemplate = builder.BuildFromFile(templateFile);
             var expectedSolution = GetNormalTextFromFile(solutionFile);
-            var actualSolution = crossword.Solve();
-
-            Assert.That(actualSolution.Status, Is.EqualTo(SolutionStatus.Solved));
-            Assert.That(actualSolution.ToString(), Is.EqualTo(expectedSolution));
+            
+            foreach (var actualSolution in crosswordSolvers.Select(solver => solver.Solve(crosswordTemplate)))
+            {
+                Assert.That(actualSolution.ToString(), Is.EqualTo(expectedSolution));
+                Assert.That(actualSolution.Status, Is.EqualTo(SolutionStatus.Solved));
+            }
         }
 
         [Test]
         public void WinterTest()
         {
-            var crossword = new CrosswordSolver(builder.BuildFromFile(@"CrosswordSolver.TestFiles\Winter.txt"));
+            var crosswordTemplate = builder.BuildFromFile(@"CrosswordSolver.TestFiles\Winter.txt");
             var expectedSolution = GetNormalTextFromFile(@"CrosswordSolver.TestFiles\Winter.Solved.txt");
-            var actualSolution = crossword.Solve();
-
-            Assert.That(actualSolution.Status, Is.EqualTo(SolutionStatus.PartiallySolved));
-            Assert.That(actualSolution.ToString(), Is.EqualTo(expectedSolution));
+            foreach (var actualSolution in crosswordSolvers.Select(solver => solver.Solve(crosswordTemplate)))
+            {
+                Assert.That(actualSolution.ToString(), Is.EqualTo(expectedSolution));
+                Assert.That(actualSolution.Status, Is.EqualTo(SolutionStatus.PartiallySolved));
+            }
         }
+
         private static string GetNormalTextFromFile(string fileName)
         {
             return File.ReadAllText(fileName).Replace("\r", "").Trim();

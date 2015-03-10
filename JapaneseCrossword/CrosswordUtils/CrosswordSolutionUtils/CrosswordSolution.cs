@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
 {

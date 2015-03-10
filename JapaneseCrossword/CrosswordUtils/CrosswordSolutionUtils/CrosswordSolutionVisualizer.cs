@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Interfaces;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
 {

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using JapaneseCrossword.CrosswordUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils;
-using MoreLinq;
 
 namespace JapaneseCrossword
 {
@@ -34,14 +31,14 @@ namespace JapaneseCrossword
 
             try
             {
-                var crossword = new CrosswordSolver(crosswordTemplateBuilder.BuildFromFile(inputFile));
-                var crosswordSolution = crossword.Solve();
+                var crosswordTemplate = crosswordTemplateBuilder.BuildFromFile(inputFile);
+                var singleThreadedCrosswordSolver = new SingleThreadedCrosswordSolver();
+                var crosswordSolution = singleThreadedCrosswordSolver.Solve(crosswordTemplate);
 
                 var crosswordSolutionVisualizer = new CrosswordSolutionVisualizer(outputFile);
                 crosswordSolutionVisualizer.Visualize(crosswordSolution);
-
             }
-            catch (ArgumentException exception)
+            catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
             }
