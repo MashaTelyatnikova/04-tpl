@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilder;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;
-using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils;
 
 namespace JapaneseCrossword
 {
@@ -26,14 +26,12 @@ namespace JapaneseCrossword
 
                 Environment.Exit(0);
             }
-
-            var crosswordTemplateBuilder = new CrosswordTemplateBuilder();
-
+            
             try
             {
-                var crosswordTemplate = crosswordTemplateBuilder.BuildFromFile(inputFile);
-                var singleThreadedCrosswordSolver = new SingleThreadedCrosswordSolver();
-                var crosswordSolution = singleThreadedCrosswordSolver.Solve(crosswordTemplate);
+                var crosswordTemplate = new CrosswordBuilder().BuildFromFile(inputFile);
+                var solver = new MultiThreadedCrosswordSolver();
+                var crosswordSolution = solver.Solve(crosswordTemplate);
 
                 var crosswordSolutionVisualizer = new CrosswordSolutionVisualizer(outputFile);
                 crosswordSolutionVisualizer.Visualize(crosswordSolution);

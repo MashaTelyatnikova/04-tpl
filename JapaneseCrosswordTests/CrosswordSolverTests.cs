@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JapaneseCrossword.CrosswordUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilder;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilder.Interfaces;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Interfaces;
-using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils;
-using JapaneseCrossword.CrosswordUtils.CrosswordTemplateUtils.CrosswordTemplateBuilderUtils.Interfaces;
 using NUnit.Framework;
 
 namespace JapaneseCrosswordTests
@@ -15,13 +14,13 @@ namespace JapaneseCrosswordTests
     [TestFixture]
     public class CrosswordSolverTests
     {
-        private ICrosswordTemplateBuilder builder;
+        private ICrosswordBuilder builder;
         private List<ICrosswordSolver> crosswordSolvers;
             
         [SetUp]
         public void SetUp()
         {
-            builder = new CrosswordTemplateBuilder();
+            builder = new CrosswordBuilder();
             crosswordSolvers = new List<ICrosswordSolver>(){new SingleThreadedCrosswordSolver(), new MultiThreadedCrosswordSolver()};
         }
 

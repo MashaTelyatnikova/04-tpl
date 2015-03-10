@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Enums;
+using JapaneseCrossword.CrosswordUtils.Enums;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 {
     public class SingleThreadedCrosswordSolver : CrosswordSolver
     {
-        protected override bool UpdateLines(List<bool> linesForUpdating, LineType type)
+        protected override bool UpdateLines(List<bool> linesForUpdating, CrosswordLineType type)
         {
             var linesUpdated = false;
             for (var lineNumber = 0; lineNumber < linesForUpdating.Count; ++lineNumber)
@@ -14,7 +14,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
                 {
                     linesUpdated = true;
                     linesForUpdating[lineNumber] = false;
-                    UpdateLine(lineNumber, type);
+                    UpdateLine(Crossword.GetLine(lineNumber, type));
                 }
             }
 

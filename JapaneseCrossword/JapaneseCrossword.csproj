@@ -60,20 +60,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrosswordUtils\Crossword.cs" />
+    <Compile Include="CrosswordUtils\CrosswordBuilder\CrosswordBuilder.cs" />
+    <Compile Include="CrosswordUtils\CrosswordBuilder\Interfaces\ICrosswordBuilder.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolutionCell.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolution.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\CrosswordSolutionVisualizer.cs" />
+    <Compile Include="CrosswordUtils\CrosswordSolverUtils\CrosswordLineCellsUpdater.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\CrosswordSolver.cs" />
-    <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplate.cs" />
-    <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\CrosswordTemplateBuilder.cs" />
-    <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateColumn.cs" />
-    <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateRow.cs" />
+    <Compile Include="CrosswordUtils\CrosswordLine.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\Interfaces\ICrosswordSolutionVisualizer.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\Enums\LineType.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\SingleThreadedCrosswordSolver.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\MultiThreadedCrosswordSolver.cs" />
+    <Compile Include="CrosswordUtils\Enums\CrosswordLineType.cs" />
     <Compile Include="FileReaderUtils\FileReader.cs" />
-    <Compile Include="CrosswordUtils\CrosswordTemplateUtils\CrosswordTemplateBuilderUtils\Interfaces\ICrosswordTemplateBuilder.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\Interfaces\ICrosswordSolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

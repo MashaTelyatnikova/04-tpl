@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Enums;
+using JapaneseCrossword.CrosswordUtils.Enums;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 {
     public class MultiThreadedCrosswordSolver : CrosswordSolver
     {
-        protected override bool UpdateLines(List<bool> linesForUpdating, LineType type)
+        protected override bool UpdateLines(List<bool> linesForUpdating, CrosswordLineType type)
         {
             try
             {
@@ -21,7 +21,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
                         linesUpdated = true;
                         linesForUpdating[lineNumber] = false;
                         var number = lineNumber;
-                        tasks.Add(Task.Run(() => UpdateLine(number, type)));
+                        tasks.Add(Task.Run(() => UpdateLine(Crossword.GetLine(number, type))));
                     }
                 }
 
