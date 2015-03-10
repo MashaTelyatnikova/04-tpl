@@ -70,7 +70,6 @@
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\CrosswordSolver.cs" />
     <Compile Include="CrosswordUtils\CrosswordLine.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolutionUtils\Interfaces\ICrosswordSolutionVisualizer.cs" />
-    <Compile Include="CrosswordUtils\CrosswordSolverUtils\Enums\LineType.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\SingleThreadedCrosswordSolver.cs" />
     <Compile Include="CrosswordUtils\CrosswordSolverUtils\MultiThreadedCrosswordSolver.cs" />
     <Compile Include="CrosswordUtils\Enums\CrosswordLineType.cs" />

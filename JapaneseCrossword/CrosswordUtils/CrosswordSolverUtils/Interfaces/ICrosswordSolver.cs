@@ -4,6 +4,6 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Interfaces
 {
     public interface ICrosswordSolver
     {
-        CrosswordSolution Solve(Crossword crosswordTemplateParam);
+        CrosswordSolution Solve(Crossword crossword);
     }
 }
