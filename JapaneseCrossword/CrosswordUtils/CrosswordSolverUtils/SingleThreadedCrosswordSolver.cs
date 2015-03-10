@@ -5,15 +5,15 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 {
     public class SingleThreadedCrosswordSolver : CrosswordSolver
     {
-        protected override bool UpdateLines(List<bool> linesForUpdating, CrosswordLineType type)
+        protected override bool UpdateLines(CrosswordLineType type)
         {
             var linesUpdated = false;
-            for (var lineNumber = 0; lineNumber < linesForUpdating.Count; ++lineNumber)
+            for (var lineNumber = 0; lineNumber < LinesForUpdating[type].Count; ++lineNumber)
             {
-                if (linesForUpdating[lineNumber])
+                if (LinesForUpdating[type][lineNumber])
                 {
                     linesUpdated = true;
-                    linesForUpdating[lineNumber] = false;
+                    LinesForUpdating[type][lineNumber] = false;
                     UpdateLine(Crossword.GetLine(lineNumber, type));
                 }
             }

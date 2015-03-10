@@ -12,21 +12,22 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
     {
         protected Crossword Crossword;
         private List<List<CrosswordSolutionCell>> crosswordCells;
-        private List<bool> rowsForUpdating;
-        private List<bool> columnsForUpdating;
+        protected Dictionary<CrosswordLineType, List<bool>> LinesForUpdating;
 
         public CrosswordSolution Solve(Crossword crosswordParam)
         {
             Crossword = crosswordParam;
+            LinesForUpdating = new Dictionary<CrosswordLineType, List<bool>>();
+
             crosswordCells = Enumerable.Range(0, Crossword.Height)
                                         .Select(i => Enumerable.Range(0, Crossword.Width)
                                                                 .Select(j => CrosswordSolutionCell.Unclear).ToList()
                                         ).ToList();
 
-            rowsForUpdating = Enumerable.Range(0, Crossword.Height)
+            LinesForUpdating[CrosswordLineType.Row] = Enumerable.Range(0, Crossword.Height)
                                     .Select(i => true)
                                     .ToList();
-            columnsForUpdating = Enumerable.Range(0, Crossword.Width)
+            LinesForUpdating[CrosswordLineType.Column] = Enumerable.Range(0, Crossword.Width)
                                     .Select(i => true)
                                     .ToList();
 
@@ -36,7 +37,8 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
             }
             catch (ArgumentException)
             {
-                return new CrosswordSolution(Enumerable.Empty<List<CrosswordSolutionCell>>().ToList(), SolutionStatus.IncorrectCrossword);
+                return new CrosswordSolution(Enumerable.Empty<List<CrosswordSolutionCell>>().ToList(),
+                    SolutionStatus.IncorrectCrossword);
             }
 
             return new CrosswordSolution(crosswordCells, CrosswordFilled() ? SolutionStatus.Solved : SolutionStatus.PartiallySolved);
@@ -47,14 +49,14 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
             var linesUpdated = true;
             while (linesUpdated)
             {
-                var rowsUpdated = UpdateLines(rowsForUpdating, CrosswordLineType.Row);
-                var columnsUpdated = UpdateLines(columnsForUpdating, CrosswordLineType.Column);
-                
+                var rowsUpdated = UpdateLines(CrosswordLineType.Row);
+                var columnsUpdated = UpdateLines(CrosswordLineType.Column);
+
                 linesUpdated = rowsUpdated || columnsUpdated;
             }
         }
 
-        protected abstract bool UpdateLines(List<bool> linesForUpdating, CrosswordLineType type);
+        protected abstract bool UpdateLines(CrosswordLineType type);
 
         private bool CrosswordFilled()
         {
@@ -64,55 +66,55 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
         protected void UpdateLine(CrosswordLine line)
         {
             var blocks = line.Blocks;
-            var currentLineCells = new List<CrosswordSolutionCell>();
-
-            if (line.Type == CrosswordLineType.Row)
-            {
-                currentLineCells = crosswordCells[line.Number];
-            }
-            else
-            {
-                for (var j = 0; j < Crossword.Height; ++j)
-                {
-                    currentLineCells.Add(crosswordCells[j][line.Number]);
-                }
-            }
+            var currentLineCells = GetLineCells(line);
 
             var lineCellsUpdater = new CrosswordLineCellsUpdater(currentLineCells, blocks);
             var updatedLineCells = lineCellsUpdater.UpdateCells();
             for (var i = 0; i < updatedLineCells.Count; ++i)
             {
-                if (line.Type == CrosswordLineType.Row)
+                if (currentLineCells[i] != updatedLineCells[i])
                 {
-                    if (currentLineCells[i] != updatedLineCells[i])
-                    {
-                        lock (columnsForUpdating)
-                        {
-                            columnsForUpdating[i] = true;
-                        }
-                    }
+                    var invertedType = line.Type == CrosswordLineType.Row
+                        ? CrosswordLineType.Column
+                        : CrosswordLineType.Row;
 
-                    lock (crosswordCells)
+                    lock (LinesForUpdating[invertedType])
+                    {
+                        LinesForUpdating[invertedType][i] = true;
+                    }
+                }
+
+                lock (crosswordCells)
+                {
+                    if (line.Type == CrosswordLineType.Row)
                     {
                         crosswordCells[line.Number][i] = updatedLineCells[i];
                     }
-                }
-                else
-                {
-                    if (currentLineCells[i] != updatedLineCells[i])
-                    {
-                        lock (rowsForUpdating)
-                        {
-                            rowsForUpdating[i] = true;
-                        }
-                    }
-
-                    lock (crosswordCells)
+                    else
                     {
                         crosswordCells[i][line.Number] = updatedLineCells[i];
                     }
                 }
             }
+        }
+
+        private List<CrosswordSolutionCell> GetLineCells(CrosswordLine line)
+        {
+            List<CrosswordSolutionCell> cells;
+            if (line.Type == CrosswordLineType.Row)
+            {
+                cells = crosswordCells[line.Number];
+            }
+            else
+            {
+                cells = new List<CrosswordSolutionCell>();
+                for (var j = 0; j < Crossword.Height; ++j)
+                {
+                    cells.Add(crosswordCells[j][line.Number]);
+                }
+            }
+
+            return cells;
         }
     }
 }
