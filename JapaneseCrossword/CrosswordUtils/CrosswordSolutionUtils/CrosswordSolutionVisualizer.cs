@@ -8,11 +8,12 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
         private readonly string outputFile;
         private const int CellWidth = 50;
         private const int CellHeight = 50;
+        private const int BorderWidth = 1;
         private static readonly Color BorderColor = Color.FromArgb(156, 156, 156);
         private static readonly Color FilledCellColor = Color.Black;
         private static readonly Color EmptyCellColor = Color.White;
         private static readonly Color UnclearCellColor = Color.FromArgb(156, 156, 156);
-
+     
         public CrosswordSolutionVisualizer(string outputFile)
         {
             this.outputFile = outputFile;
@@ -23,28 +24,28 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
             var width = crosswordSolution.Width * CellWidth;
             var height = crosswordSolution.Height * CellHeight;
 
-            using (var bitmap = new Bitmap(width, height))
+            using (var crosswordSolutionImage = new Bitmap(width, height))
             {
-                using (var graphics = Graphics.FromImage(bitmap))
+                using (var crosswordSolutionGraphics = Graphics.FromImage(crosswordSolutionImage))
                 {
-                    for (var i = 0; i < crosswordSolution.CrosswordCells.Count; ++i)
+                    for (var x = 0; x < crosswordSolution.CrosswordCells.Count; ++x)
                     {
-                        for (var j = 0; j < crosswordSolution.CrosswordCells[i].Count; ++j)
+                        for (var y = 0; y < crosswordSolution.CrosswordCells[x].Count; ++y)
                         {
-                            var cell = crosswordSolution.CrosswordCells[i][j];
-                            DrawCell(cell, i, j, graphics);
+                            var cell = crosswordSolution.CrosswordCells[x][y];
+                            DrawCell(cell, x, y, crosswordSolutionGraphics);
                         }
                     }
                 }
 
-                bitmap.Save(outputFile);
+                crosswordSolutionImage.Save(outputFile);
             }
         }
 
-        private static void DrawCell(CrosswordSolutionCell solutionCell, int i, int j, Graphics graphics)
+        private static void DrawCell(CrosswordSolutionCell solutionCell, int x, int y, Graphics crosswordSolutionGraphics)
         {
             SolidBrush rectangleBrush;
-            var rectanglePen = new Pen(BorderColor, 1); 
+            var rectanglePen = new Pen(BorderColor, BorderWidth); 
 
             switch (solutionCell)
             {
@@ -59,8 +60,8 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils
                     break;
             }
 
-            graphics.FillRectangle(rectangleBrush, j * CellWidth, i * CellHeight, CellWidth, CellHeight);
-            graphics.DrawRectangle(rectanglePen, j * CellWidth, i * CellHeight, CellWidth, CellHeight);
+            crosswordSolutionGraphics.FillRectangle(rectangleBrush, y * CellWidth, x * CellHeight, CellWidth, CellHeight);
+            crosswordSolutionGraphics.DrawRectangle(rectanglePen, y * CellWidth, x * CellHeight, CellWidth, CellHeight);
         }
     }
 }
