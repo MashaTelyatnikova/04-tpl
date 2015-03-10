@@ -37,7 +37,7 @@ namespace JapaneseCrosswordTests
             var file = @"CrosswordBuilder.TestFiles\Empty.txt";
 
             var actualCrossword = crosswordBuilder.BuildFromFile(file);
-            var expectedCrossword = new Crossword(0, 0, Enumerable.Empty<CrosswordLine>());
+            var expectedCrossword = new Crossword(Enumerable.Empty<CrosswordLine>());
             Assert.That(actualCrossword, Is.EqualTo(expectedCrossword));
         }
 
@@ -47,7 +47,7 @@ namespace JapaneseCrosswordTests
             var file = @"CrosswordBuilder.TestFiles\Simple.txt";
 
             var actualCrossword = crosswordBuilder.BuildFromFile(file);
-            var expectedCrossword = new Crossword(1, 1,
+            var expectedCrossword = new Crossword(
                 new List<CrosswordLine>
                 {
                     new CrosswordLine(0, CrosswordLineType.Row, 1),
@@ -64,7 +64,7 @@ namespace JapaneseCrosswordTests
 
             var actualCrossword = crosswordBuilder.BuildFromFile(file);
 
-            var expectedCrossword = new Crossword(2, 4, new List<CrosswordLine>()
+            var expectedCrossword = new Crossword(new List<CrosswordLine>()
             {
                 new CrosswordLine(0, CrosswordLineType.Row, 1, 2, 3),
                 new CrosswordLine(1, CrosswordLineType.Row, 1),

@@ -9,7 +9,7 @@ namespace JapaneseCrossword.CrosswordUtils
         public CrosswordLineType Type { get; private set; }
         public int[] Blocks { get; private set; }
 
-        public CrosswordLine(int number, CrosswordLineType type,params int [] blocks)
+        public CrosswordLine(int number, CrosswordLineType type, params int [] blocks)
         {
             Number = number;
             Type = type;

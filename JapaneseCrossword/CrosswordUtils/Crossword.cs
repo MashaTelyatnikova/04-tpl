@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JapaneseCrossword.CrosswordUtils.Enums;
 
@@ -10,12 +11,14 @@ namespace JapaneseCrossword.CrosswordUtils
         public int Height { get; private set; }
 
         private IEnumerable<CrosswordLine> lines;
-        public Crossword(int width, int height, IEnumerable<CrosswordLine> lines)
+        public Crossword(IEnumerable<CrosswordLine> lines)
         {
-            this.Width = width;
-            this.Height = height;
+           if (lines == null)
+               throw new ArgumentNullException();
+            
+            Width = lines.Count(line => line.Type == CrosswordLineType.Column);
+            Height = lines.Count(line => line.Type == CrosswordLineType.Row);
             this.lines = lines;
-            //проверить корректность
         }
 
         public CrosswordLine GetLine(int lineNumber, CrosswordLineType type)

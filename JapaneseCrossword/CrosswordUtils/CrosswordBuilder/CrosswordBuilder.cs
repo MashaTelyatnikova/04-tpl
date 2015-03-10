@@ -65,7 +65,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordBuilder
                 lines.Add(new CrosswordLine(i, CrosswordLineType.Column, enumerable.Select(e => e.Value).ToArray()));
             }
 
-            return new Crossword(width.GetValueOrDefault(), height.GetValueOrDefault(), lines);
+            return new Crossword(lines);
 
         }
     }

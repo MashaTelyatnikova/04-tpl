@@ -72,7 +72,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 
             if (blockNumber == blocks.Length - 1)
             {
-                for (var i = start + blocks[blockNumber]; i < lineCells.Count; ++i)
+                for (var i = start + blocks[blockNumber]; i >= 0 && i < lineCells.Count; ++i)
                 {
                     if (lineCells[i] == CrosswordSolutionCell.Filled)
                     {
@@ -80,7 +80,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
                     }
                 }
 
-                for (var i = start; i < lineCells.Count; ++i)
+                for (var i = start; i >= 0 && i < lineCells.Count; ++i)
                 {
                     if (i >= start && i < start + blocks[blockNumber])
                     {

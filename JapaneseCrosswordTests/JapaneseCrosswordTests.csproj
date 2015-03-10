@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrosswordLineCellsUpdaterTests.cs" />
+    <Compile Include="CrosswordTests.cs" />
     <Compile Include="CrosswordSolutionTests.cs" />
     <Compile Include="CrosswordSolverTests.cs" />
     <Compile Include="CrosswordBuilderTests.cs" />
