@@ -7,6 +7,11 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 {
     public class MultiThreadedCrosswordSolver : CrosswordSolver
     {
+        public override string Name
+        {
+            get { return "Multi-Threaded Crossword Solver"; }
+        }
+
         protected override bool UpdateLines(CrosswordLineType type)
         {
             try

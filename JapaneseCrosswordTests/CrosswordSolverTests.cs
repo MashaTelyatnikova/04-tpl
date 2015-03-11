@@ -2,7 +2,8 @@
 using System.IO;
 using System.Linq;
 using JapaneseCrossword.CrosswordUtils.CrosswordBuilder;
-using JapaneseCrossword.CrosswordUtils.CrosswordBuilder.Interfaces;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils.Interfaces;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;

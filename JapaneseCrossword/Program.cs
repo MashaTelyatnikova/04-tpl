@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
-using JapaneseCrossword.CrosswordUtils.CrosswordBuilder;
+using System.Windows.Forms.DataVisualization.Charting;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Interfaces;
 
 namespace JapaneseCrossword
 {
@@ -26,7 +29,7 @@ namespace JapaneseCrossword
 
                 Environment.Exit(0);
             }
-            
+
             try
             {
                 var crosswordTemplate = new CrosswordBuilder().BuildFromFile(inputFile);
@@ -35,6 +38,13 @@ namespace JapaneseCrossword
 
                 var crosswordSolutionVisualizer = new CrosswordSolutionVisualizer(outputFile);
                 crosswordSolutionVisualizer.Visualize(crosswordSolution);
+
+                var chart = CrosswordSolversComparer.Compare(
+                    new ICrosswordSolver[] { new MultiThreadedCrosswordSolver(), new SingleThreadedCrosswordSolver() },
+                    new[] { Color.Blue, Color.Red });
+                
+                chart.SaveImage("result.png", ChartImageFormat.Png);
+                chart.Dispose();
             }
             catch (Exception exception)
             {

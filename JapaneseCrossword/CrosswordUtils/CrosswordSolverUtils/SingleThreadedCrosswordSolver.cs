@@ -5,6 +5,11 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 {
     public class SingleThreadedCrosswordSolver : CrosswordSolver
     {
+        public override string Name
+        {
+            get { return "Single-Threaded Crossword Solver"; }
+        }
+
         protected override bool UpdateLines(CrosswordLineType type)
         {
             var linesUpdated = false;

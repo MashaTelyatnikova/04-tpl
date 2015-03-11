@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JapaneseCrossword.CrosswordUtils.CrosswordBuilder.Interfaces;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils.Interfaces;
 using JapaneseCrossword.CrosswordUtils.Enums;
 using JapaneseCrossword.FileReaderUtils;
 
-namespace JapaneseCrossword.CrosswordUtils.CrosswordBuilder
+namespace JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils
 {
     public class CrosswordBuilder : ICrosswordBuilder
     {

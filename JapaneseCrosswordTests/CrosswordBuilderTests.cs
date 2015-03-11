@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using JapaneseCrossword.CrosswordUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordBuilder;
-using JapaneseCrossword.CrosswordUtils.CrosswordBuilder.Interfaces;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils;
+using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils.Interfaces;
 using JapaneseCrossword.CrosswordUtils.Enums;
 using NUnit.Framework;
 

@@ -44,6 +44,11 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
             return new CrosswordSolution(crosswordCells, CrosswordFilled() ? SolutionStatus.Solved : SolutionStatus.PartiallySolved);
         }
 
+        public virtual string Name
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         private void UpdateCrosswordCells()
         {
             var linesUpdated = true;
