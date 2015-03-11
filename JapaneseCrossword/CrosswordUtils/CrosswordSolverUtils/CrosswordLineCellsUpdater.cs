@@ -41,13 +41,8 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 
                 if (LineCompleted(lineCells, blocks.Skip(1).ToList()))
                 {
-                    for (var j = 0; j < lineCells.Count; ++j)
-                    {
-                        if (lineCells[j] == CrosswordSolutionCell.Unclear)
-                        {
-                            lineCells[j] = CrosswordSolutionCell.Empty;
-                        }
-                    }
+                    lineCells.Where(cell => cell == CrosswordSolutionCell.Unclear)
+                                .ForEach(cell => cell = CrosswordSolutionCell.Empty);
                 }
             }
             else
@@ -60,25 +55,13 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 
         private bool TrySetBlock(int start, int blockNumber)
         {
-
-            for (var i = start; i >= 0 && i < blocks[blockNumber] + start; ++i)
-            {
-                if (lineCells[i] == CrosswordSolutionCell.Empty)
-                {
-                    return false;
-                }
-
-            }
+            if (start >= 0 && lineCells.Slice(start, blocks[blockNumber]).Contains(CrosswordSolutionCell.Empty))
+                return false;
 
             if (blockNumber == blocks.Length - 1)
             {
-                for (var i = start + blocks[blockNumber]; i >= 0 && i < lineCells.Count; ++i)
-                {
-                    if (lineCells[i] == CrosswordSolutionCell.Filled)
-                    {
-                        return false;
-                    }
-                }
+                if (lineCells.Slice(start + blocks[blockNumber], lineCells.Count).Contains(CrosswordSolutionCell.Filled))
+                    return false;
 
                 for (var i = start; i >= 0 && i < lineCells.Count; ++i)
                 {
@@ -94,6 +77,7 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 
                 return true;
             }
+
             var nextPosition = start + blocks[blockNumber] + (start == -1 ? 0 : 1);
             var blockIsSet = false;
             for (; nextPosition < lineCells.Count - blocks[blockNumber + 1] + 1; ++nextPosition)
@@ -102,24 +86,25 @@ namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
                 {
                     break;
                 }
-                if (TrySetBlock(nextPosition, blockNumber + 1))
+
+                if (!TrySetBlock(nextPosition, blockNumber + 1))
                 {
-                    var i = start >= 0 ? start : 0;
-
-                    for (; i < nextPosition; ++i)
-                    {
-                        if (i >= start && i < start + blocks[blockNumber])
-                        {
-                            maybeFilledCells[i] = true;
-                        }
-                        else
-                        {
-                            maybeEmptyCells[i] = true;
-                        }
-                    }
-
-                    blockIsSet = true;
+                    continue;
                 }
+
+                for (var i = start >= 0 ? start : 0; i < nextPosition; ++i)
+                {
+                    if (i >= start && i < start + blocks[blockNumber])
+                    {
+                        maybeFilledCells[i] = true;
+                    }
+                    else
+                    {
+                        maybeEmptyCells[i] = true;
+                    }
+                }
+
+                blockIsSet = true;
             }
             return blockIsSet;
         }

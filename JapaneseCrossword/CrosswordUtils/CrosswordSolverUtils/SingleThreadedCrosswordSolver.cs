@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using JapaneseCrossword.CrosswordUtils.Enums;
+﻿using JapaneseCrossword.CrosswordUtils.Enums;
 
 namespace JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils
 {

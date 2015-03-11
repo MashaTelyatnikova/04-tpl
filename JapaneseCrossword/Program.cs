@@ -32,6 +32,8 @@ namespace JapaneseCrossword
 
             try
             {
+                var a = new[] {1, 2, 3, 4, 5};
+
                 var crosswordTemplate = new CrosswordBuilder().BuildFromFile(inputFile);
                 var solver = new MultiThreadedCrosswordSolver();
                 var crosswordSolution = solver.Solve(crosswordTemplate);

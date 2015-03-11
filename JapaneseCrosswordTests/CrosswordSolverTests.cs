@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JapaneseCrossword.CrosswordUtils.CrosswordBuilder;
 using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils;
 using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils.Interfaces;
 using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
