@@ -1,4 +1,4 @@
-﻿namespace JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils.Interfaces
+﻿namespace JapaneseCrossword.CrosswordBuilderUtils
 {
     public interface ICrosswordBuilder
     {

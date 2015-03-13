@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
-using System.Windows.Forms.DataVisualization.Charting;
-using JapaneseCrossword.CrosswordUtils.CrosswordBuilderUtils;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils.Interfaces;
+using JapaneseCrossword.CrosswordBuilderUtils;
+using JapaneseCrossword.CrosswordSolutionUtils;
+using JapaneseCrossword.CrosswordSolverUtils;
 
 namespace JapaneseCrossword
 {
@@ -32,21 +29,21 @@ namespace JapaneseCrossword
 
             try
             {
-                var a = new[] {1, 2, 3, 4, 5};
-
                 var crosswordTemplate = new CrosswordBuilder().BuildFromFile(inputFile);
                 var solver = new MultiThreadedCrosswordSolver();
                 var crosswordSolution = solver.Solve(crosswordTemplate);
 
-                var crosswordSolutionVisualizer = new CrosswordSolutionVisualizer(outputFile);
-                crosswordSolutionVisualizer.Visualize(crosswordSolution);
+                if (crosswordSolution.Status == SolutionStatus.IncorrectCrossword)
+                {
+                    Console.WriteLine("Incorrect Crossword =(");
+                    Environment.Exit(0);
+                }
 
-                var chart = CrosswordSolversComparer.Compare(
-                    new ICrosswordSolver[] { new MultiThreadedCrosswordSolver(), new SingleThreadedCrosswordSolver() },
-                    new[] { Color.Blue, Color.Red });
-                
-                chart.SaveImage("result.png", ChartImageFormat.Png);
-                chart.Dispose();
+                var crosswordSolutionVisualizer = new CrosswordSolutionVisualizer();
+                using (var image = crosswordSolutionVisualizer.Visualize(crosswordSolution))
+                {
+                    image.Save(outputFile);
+                }
             }
             catch (Exception exception)
             {

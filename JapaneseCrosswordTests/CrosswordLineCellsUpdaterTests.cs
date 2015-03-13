@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolutionUtils.Enums;
-using JapaneseCrossword.CrosswordUtils.CrosswordSolverUtils;
+using JapaneseCrossword;
+using JapaneseCrossword.CrosswordSolverUtils;
 using NUnit.Framework;
 
 namespace JapaneseCrosswordTests
@@ -11,158 +10,77 @@ namespace JapaneseCrosswordTests
     [TestFixture]
     public class CrosswordLineCellsUpdaterTests
     {
-        [Test]
-        public void UpdateCells_ForEmptyParameters_ReturnEmptyResult()
+        [TestCaseSource("GetGoodInputs")]
+        public void UpdateCells_ForCorrectLine_ReturnCorrectResult(string initialCells, CrosswordLine line,
+            string expectedCells)
         {
-            var updater =
-                new CrosswordLineCellsUpdater(
-                   Enumerable.Empty<CrosswordSolutionCell>(), new int[] { });
+            var solver = new CrosswordLineCellsUpdater(GetCellsFromString(initialCells), line);
+            var solution = solver.GetUpdatedCells();
 
-            var actualUpdatedCells = updater.UpdateCells();
-            var expectedUpdatedCells = Enumerable.Empty<CrosswordSolutionCell>();
-
-            Assert.That(expectedUpdatedCells, Is.EqualTo(actualUpdatedCells));
+            Assert.That(solution, Is.EqualTo(GetCellsFromString(expectedCells)));
         }
 
-        [Test]
-        public void UpdateCells_ForEmptyBlocks_ReturnCorrectResult()
-        {
-            var updater =
-                new CrosswordLineCellsUpdater(
-                    new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear },
-                    new int[] { });
 
-            var actualUpdatedCells = updater.UpdateCells();
-            var expectedUpdatedCells = new List<CrosswordSolutionCell>()
+        [TestCaseSource("GetBadInputs")]
+        public void UpdateCells_ForIncorrectLine_ReturnNull(string initialCells, CrosswordLine line)
+        {
+            var solver = new CrosswordLineCellsUpdater(GetCellsFromString(initialCells), line);
+            var solution = solver.GetUpdatedCells();
+
+            Assert.That(solution, Is.Null);
+        }
+
+
+        private IEnumerable<object[]> GetGoodInputs()
+        {
+
+            yield return new object[] { "", new CrosswordLine(), "" };
+            yield return new object[] { "??", new CrosswordLine(), "  " };
+            yield return new object[] { "??", new CrosswordLine(2), "**" };
+            yield return new object[] { "*??  ??", new CrosswordLine(3, 1), "***  ??" };
+            yield return new object[] { "?***?", new CrosswordLine(3), " *** " };
+            yield return new object[] { "????", new CrosswordLine(3), "?**?" };
+            yield return new object[] { "***?", new CrosswordLine(3), "*** " };
+            yield return new object[] { "**? ?", new CrosswordLine(2, 1), "**  *" };
+            yield return new object[] { " **??", new CrosswordLine(3), " *** " };
+            yield return new object[] { "??????????", new CrosswordLine(1, 3, 2), "????*?????" };
+            yield return new object[] { "??????????", new CrosswordLine(1, 4, 2), "???***??*?" };
+            yield return new object[] { "*? *??????", new CrosswordLine(1, 3, 2), "*  *** ?*?" };
+            yield return new object[] { "????????????", new CrosswordLine(1, 1, 2, 4), "?????*??***?" };
+            yield return new object[] { "???*??", new CrosswordLine(1, 1, 1), "?? * *" };
+            yield return new object[]{new string('?', 100), new CrosswordLine(1, 1, 1, 1), new string('?', 100)};
+
+        }
+
+        private static IEnumerable<object[]> GetBadInputs()
+        {
+
+            yield return new object[] { "", new CrosswordLine(2, 1) };
+            yield return new object[] { "* ?", new CrosswordLine(1, 2) };
+            yield return new object[] { "**", new CrosswordLine(1) };
+            yield return new object[] { "*??????*", new CrosswordLine(2, 2, 3) };
+
+        }
+        
+        private static List<CrosswordCell> GetCellsFromString(string cells)
+        {
+            return cells.Select(GetCellFromChar).ToList();
+        }
+
+        private static CrosswordCell GetCellFromChar(char c)
+        {
+            switch (c)
             {
-                CrosswordSolutionCell.Empty,
-                CrosswordSolutionCell.Empty
-            };
+                case ' ':
+                    return CrosswordCell.Empty;
+                case '*':
+                    return CrosswordCell.Filled;
+                case '?':
+                    return CrosswordCell.Unclear;
+                default:
+                    throw new ArgumentException();
 
-            Assert.That(expectedUpdatedCells, Is.EqualTo(actualUpdatedCells));
-        }
-
-        [Test]
-        public void UpdateCells_ForOneBlockFitsInLine_ReturnCorrectResult()
-        {
-            var updater =
-               new CrosswordLineCellsUpdater(
-                   new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear },
-                   new[] { 2 });
-
-            var actualUpdatedCells = updater.UpdateCells();
-            var expectedUpdatedCells = new List<CrosswordSolutionCell>()
-            {
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Filled
-            };
-
-            Assert.That(expectedUpdatedCells, Is.EqualTo(actualUpdatedCells));
-        }
-
-        [Test]
-        public void UpdateCells_ForBlocksThatDoNotFitIntoLine_ThrowsArgumentException()
-        {
-            var updater =
-               new CrosswordLineCellsUpdater(
-                   new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Filled, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Unclear },
-                   new[] { 1, 2 });
-
-            Assert.Throws<ArgumentException>(() => updater.UpdateCells());
-        }
-
-        [Test]
-        public void Test5()
-        {
-            var updater =
-               new CrosswordLineCellsUpdater(
-                   new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled },
-                   new[] { 1 });
-
-            Assert.Throws<ArgumentException>(() => updater.UpdateCells());
-        }
-
-        [Test]
-        public void Test6()
-        {
-            var updater =
-               new CrosswordLineCellsUpdater(
-                   new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear,
-                       CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear },
-                   new[] { 3 });
-
-            var actualUpdatedCells = updater.UpdateCells();
-            var expectedUpdatedCells = new List<CrosswordSolutionCell>()
-            {
-                CrosswordSolutionCell.Unclear,
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Unclear
-            };
-
-            Assert.That(expectedUpdatedCells, Is.EqualTo(actualUpdatedCells));
-        }
-
-        [Test]
-        public void Test7()
-        {
-            var updater =
-               new CrosswordLineCellsUpdater(
-                   new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Unclear },
-                   new[] { 3 });
-
-            var actualUpdatedCells = updater.UpdateCells();
-            var expectedUpdatedCells = new List<CrosswordSolutionCell>()
-            {
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Empty
-            };
-
-            Assert.That(expectedUpdatedCells, Is.EqualTo(actualUpdatedCells));
-        }
-
-        [Test]
-        public void Test8()
-        {
-            var updater =
-               new CrosswordLineCellsUpdater(
-                   new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Empty, CrosswordSolutionCell.Unclear },
-                   new[] { 2, 1 });
-
-            var actualUpdatedCells = updater.UpdateCells();
-            var expectedUpdatedCells = new List<CrosswordSolutionCell>()
-            {
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Empty,
-                CrosswordSolutionCell.Empty,
-                CrosswordSolutionCell.Filled
-            };
-
-            Assert.That(expectedUpdatedCells, Is.EqualTo(actualUpdatedCells));
-        }
-
-        [Test]
-        public void Test9()
-        {
-            var updater =
-               new CrosswordLineCellsUpdater(
-                   new List<CrosswordSolutionCell>() { CrosswordSolutionCell.Empty, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Filled, CrosswordSolutionCell.Unclear, CrosswordSolutionCell.Unclear },
-                   new[] {3 });
-
-            var actualUpdatedCells = updater.UpdateCells();
-            var expectedUpdatedCells = new List<CrosswordSolutionCell>()
-            {
-                CrosswordSolutionCell.Empty,
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Filled,
-                CrosswordSolutionCell.Empty
-            };
-
-            Assert.That(expectedUpdatedCells, Is.EqualTo(actualUpdatedCells));
+            }
         }
     }
 }
