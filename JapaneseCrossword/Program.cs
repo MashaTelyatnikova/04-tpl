@@ -29,9 +29,9 @@ namespace JapaneseCrossword
 
             try
             {
-                var crosswordTemplate = new CrosswordBuilder().BuildFromFile(inputFile);
-                var solver = new SingleThreadedCrosswordSolver();
-                var crosswordSolution = solver.Solve(crosswordTemplate);
+                var crossword = new CrosswordBuilder().BuildFromFile(inputFile);
+                var multiThreadedCrosswordSolver = new MultiThreadedCrosswordSolver();
+                var crosswordSolution = multiThreadedCrosswordSolver.Solve(crossword);
 
                 if (crosswordSolution.Status == CrosswordSolutionStatus.IncorrectCrossword)
                 {

@@ -19,9 +19,9 @@ namespace JapaneseCrossword.CrosswordSolverUtils
             while (ExistsLinesForUpdating())
             {
                 var rowsResult = UpdateLines(CrosswordLineType.Row);
-                var columnResult = UpdateLines(CrosswordLineType.Column);
+                var columnsResult = UpdateLines(CrosswordLineType.Column);
 
-                if (!rowsResult || !columnResult)
+                if (!rowsResult || !columnsResult)
                 {
                     return new CrosswordSolution(Enumerable.Empty<List<CrosswordCell>>().ToList(),
                        CrosswordSolutionStatus.IncorrectCrossword);
