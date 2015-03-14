@@ -49,7 +49,8 @@ namespace JapaneseCrosswordTests
             yield return new object[] { "????????????", new CrosswordLine(1, 1, 2, 4), "?????*??***?" };
             yield return new object[] { "???*??", new CrosswordLine(1, 1, 1), "?? * *" };
             yield return new object[]{new string('?', 100), new CrosswordLine(1, 1, 1, 1), new string('?', 100)};
-
+            yield return new object[] {"?????*???*?", new CrosswordLine(1, 1, 1, 2), "???? * ??*?"};
+            yield return new object[] { " ?????? ???*?", new CrosswordLine(2, 2, 2, 2), " ?*??*? ** **" };
         }
 
         private static IEnumerable<object[]> GetBadInputs()
@@ -59,6 +60,8 @@ namespace JapaneseCrosswordTests
             yield return new object[] { "* ?", new CrosswordLine(1, 2) };
             yield return new object[] { "**", new CrosswordLine(1) };
             yield return new object[] { "*??????*", new CrosswordLine(2, 2, 3) };
+            yield return new object[] { "?????*???*?*", new CrosswordLine(1, 1, 1, 2)};
+            yield return new object[] { "****?", new CrosswordLine(4, 1) };
 
         }
         
