@@ -8,7 +8,6 @@ namespace JapaneseCrossword.CrosswordSolverUtils
     {
         protected override bool UpdateLines(CrosswordLineType type)
         {
-            var updatesResults = new List<Tuple<int, List<CrosswordCell>>>();
             var linesForUpdating = LinesForUpdatingAtType[type];
 
             for (var i = 0; i < linesForUpdating.Count; ++i)
@@ -20,19 +19,14 @@ namespace JapaneseCrossword.CrosswordSolverUtils
                     var rowCells = GetLineCells(type, i);
                     var line = GetCrosswordLine(type, i);
                     var updater = new CrosswordLineCellsUpdater(rowCells, line);
-
-                    updatesResults.Add(Tuple.Create(i, updater.GetUpdatedCells()));
+                    var updatedCells = updater.GetUpdatedCells();
+                    
+                    if (updatedCells == null)
+                        return false;
+                    
+                    UpdateLine(type, i, updatedCells);
                 }
             }
-
-            if (updatesResults.Any(result => result.Item2 == null))
-                return false;
-
-            foreach (var result in updatesResults)
-            {
-                UpdateLine(type, result.Item1, result.Item2);
-            }
-
             return true;
         }
     }

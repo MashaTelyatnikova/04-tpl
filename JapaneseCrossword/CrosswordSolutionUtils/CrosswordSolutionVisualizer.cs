@@ -3,7 +3,7 @@ using JapaneseCrossword.CrosswordSolverUtils;
 
 namespace JapaneseCrossword.CrosswordSolutionUtils
 {
-    class CrosswordSolutionVisualizer : ICrosswordSolutionVisualizer<Bitmap>
+    public class CrosswordSolutionVisualizer : ICrosswordSolutionVisualizer<Bitmap>
     {
         private const int CellWidth = 50;
         private const int CellHeight = 50;
