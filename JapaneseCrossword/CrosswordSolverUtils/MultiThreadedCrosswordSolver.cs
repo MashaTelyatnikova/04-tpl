@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace JapaneseCrossword.CrosswordSolverUtils
 {
-    public class MultiThreadedCrosswordSolver : MyCrosswordSolver
+    public class MultiThreadedCrosswordSolver : CrosswordSolver
     {
-        protected override bool UpdateLines(LineType type)
+        protected override bool UpdateLines(CrosswordLineType type)
         {
             var tasks = new List<Task<Tuple<int, List<CrosswordCell>>>>();
             var linesForUpdating = LinesForUpdatingAtType[type];

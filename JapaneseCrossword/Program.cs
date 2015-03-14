@@ -19,7 +19,7 @@ namespace JapaneseCrossword
 
             var inputFile = args[0];
             var outputFile = args[1];
-
+            
             if (!File.Exists(inputFile))
             {
                 Console.WriteLine("No input file {0}.", inputFile);
@@ -30,12 +30,13 @@ namespace JapaneseCrossword
             try
             {
                 var crosswordTemplate = new CrosswordBuilder().BuildFromFile(inputFile);
-                var solver = new MultiThreadedCrosswordSolver();
+                var solver = new SingleThreadedCrosswordSolver();
                 var crosswordSolution = solver.Solve(crosswordTemplate);
 
-                if (crosswordSolution.Status == SolutionStatus.IncorrectCrossword)
+                if (crosswordSolution.Status == CrosswordSolutionStatus.IncorrectCrossword)
                 {
                     Console.WriteLine("Incorrect Crossword =(");
+                    
                     Environment.Exit(0);
                 }
 

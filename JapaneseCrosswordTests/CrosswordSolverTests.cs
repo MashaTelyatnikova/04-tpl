@@ -15,7 +15,7 @@ namespace JapaneseCrosswordTests
         private ICrosswordBuilder builder;
         private List<ICrosswordSolver> crosswordSolvers;
         private ICrosswordSolutionVisualizer<string> crosswordSolutionVisualizer;
-        
+
         [SetUp]
         public void SetUp()
         {
@@ -50,7 +50,7 @@ namespace JapaneseCrosswordTests
             foreach (var actualSolution in crosswordSolvers.Select(solver => solver.Solve(crosswordTemplate)))
             {
                 Assert.That(crosswordSolutionVisualizer.Visualize(actualSolution), Is.EqualTo(expectedSolution));
-                Assert.That(actualSolution.Status, Is.EqualTo(SolutionStatus.Solved));
+                Assert.That(actualSolution.Status, Is.EqualTo(CrosswordSolutionStatus.Solved));
             }
         }
 
@@ -62,7 +62,7 @@ namespace JapaneseCrosswordTests
             foreach (var actualSolution in crosswordSolvers.Select(solver => solver.Solve(crosswordTemplate)))
             {
                 Assert.That(crosswordSolutionVisualizer.Visualize(actualSolution), Is.EqualTo(expectedSolution));
-                Assert.That(actualSolution.Status, Is.EqualTo(SolutionStatus.PartiallySolved));
+                Assert.That(actualSolution.Status, Is.EqualTo(CrosswordSolutionStatus.PartiallySolved));
             }
         }
 

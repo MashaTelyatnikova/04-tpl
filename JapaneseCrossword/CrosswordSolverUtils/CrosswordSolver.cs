@@ -6,11 +6,11 @@ using MoreLinq;
 
 namespace JapaneseCrossword.CrosswordSolverUtils
 {
-    public abstract class MyCrosswordSolver : ICrosswordSolver
+    public abstract class CrosswordSolver : ICrosswordSolver
     {
         private Crossword crossword;
         private CrosswordField crosswordField;
-        protected Dictionary<LineType, List<bool>> LinesForUpdatingAtType;
+        protected Dictionary<CrosswordLineType, List<bool>> LinesForUpdatingAtType;
 
         public CrosswordSolution Solve(Crossword crosswordParam)
         {
@@ -18,18 +18,18 @@ namespace JapaneseCrossword.CrosswordSolverUtils
 
             while (ExistsLinesForUpdating())
             {
-                var rowsResult = UpdateLines(LineType.Row);
-                var columnResult = UpdateLines(LineType.Column);
+                var rowsResult = UpdateLines(CrosswordLineType.Row);
+                var columnResult = UpdateLines(CrosswordLineType.Column);
 
                 if (!rowsResult || !columnResult)
                 {
                     return new CrosswordSolution(Enumerable.Empty<List<CrosswordCell>>().ToList(),
-                       SolutionStatus.IncorrectCrossword);
+                       CrosswordSolutionStatus.IncorrectCrossword);
                 }
             }
 
             return new CrosswordSolution(crosswordField.ToMatrix(),
-                crosswordField.IsFilled() ? SolutionStatus.Solved : SolutionStatus.PartiallySolved);
+                crosswordField.IsFilled() ? CrosswordSolutionStatus.Solved : CrosswordSolutionStatus.PartiallySolved);
         }
 
         private void InitCurrentState(Crossword crosswordParam)
@@ -37,23 +37,23 @@ namespace JapaneseCrossword.CrosswordSolverUtils
             crossword = crosswordParam;
             crosswordField = new CrosswordField(crossword.Width, crossword.Height);
 
-            LinesForUpdatingAtType = new Dictionary<LineType, List<bool>>();
-            LinesForUpdatingAtType[LineType.Row] = Enumerable.Repeat(true, crossword.Height).ToList();
-            LinesForUpdatingAtType[LineType.Column] = Enumerable.Repeat(true, crossword.Width).ToList();
+            LinesForUpdatingAtType = new Dictionary<CrosswordLineType, List<bool>>();
+            LinesForUpdatingAtType[CrosswordLineType.Row] = Enumerable.Repeat(true, crossword.Height).ToList();
+            LinesForUpdatingAtType[CrosswordLineType.Column] = Enumerable.Repeat(true, crossword.Width).ToList();
 
         }
 
         private bool ExistsLinesForUpdating()
         {
-            return LinesForUpdatingAtType[LineType.Row].Any(i => i) ||
-                   LinesForUpdatingAtType[LineType.Column].Any(i => i);
+            return LinesForUpdatingAtType[CrosswordLineType.Row].Any(i => i) ||
+                   LinesForUpdatingAtType[CrosswordLineType.Column].Any(i => i);
         }
 
-        protected abstract bool UpdateLines(LineType type);
+        protected abstract bool UpdateLines(CrosswordLineType type);
         
-        protected void UpdateLine(LineType type, int lineNumber, List<CrosswordCell> cells)
+        protected void UpdateLine(CrosswordLineType type, int lineNumber, List<CrosswordCell> cells)
         {
-            var invertedLineType = type == LineType.Row ? LineType.Column : LineType.Row;
+            var invertedLineType = type == CrosswordLineType.Row ? CrosswordLineType.Column : CrosswordLineType.Row;
 
             var oldCells = GetLineCells(type, lineNumber).Select((cell, column) => Tuple.Create(cell, column)).ToList();
             var newCells = cells.Select((cell, column) => Tuple.Create(cell, column)).ToList();
@@ -61,23 +61,23 @@ namespace JapaneseCrossword.CrosswordSolverUtils
             newCells.Except(oldCells).ForEach(tuple =>
             {
                 LinesForUpdatingAtType[invertedLineType][tuple.Item2] = true;
-                if (type == LineType.Row)
+                if (type == CrosswordLineType.Row)
                     crosswordField[lineNumber, tuple.Item2] = newCells[tuple.Item2].Item1;
                 else
                     crosswordField[tuple.Item2, lineNumber] = newCells[tuple.Item2].Item1;
             });
         }
 
-        protected List<CrosswordCell> GetLineCells(LineType type, int number)
+        protected List<CrosswordCell> GetLineCells(CrosswordLineType type, int number)
         {
-            return type == LineType.Row
+            return type == CrosswordLineType.Row
                 ? crosswordField.GetRowCells(number)
                 : crosswordField.GetColumnCells(number);
         }
 
-        protected CrosswordLine GetCrosswordLine(LineType type, int number)
+        protected CrosswordLine GetCrosswordLine(CrosswordLineType type, int number)
         {
-            return type == LineType.Row ? crossword.Rows[number] : crossword.Columns[number];
+            return type == CrosswordLineType.Row ? crossword.Rows[number] : crossword.Columns[number];
         }
     }
 }

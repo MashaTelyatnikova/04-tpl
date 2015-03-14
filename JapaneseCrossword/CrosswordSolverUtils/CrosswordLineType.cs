@@ -1,6 +1,6 @@
 ﻿namespace JapaneseCrossword.CrosswordSolverUtils
 {
-    public enum LineType
+    public enum CrosswordLineType
     {
         Row,
         Column

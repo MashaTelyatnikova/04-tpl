@@ -10,7 +10,7 @@ namespace TaskCompletionSource
         private const string BashUrl = "http://bash.im/abyssbest/20150201";
         private Cache cache;
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void Setup()
         {
             cache = new Cache();

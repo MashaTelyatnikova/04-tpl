@@ -1,6 +1,6 @@
 ﻿namespace JapaneseCrossword.CrosswordSolutionUtils
 {
-    public enum SolutionStatus
+    public enum CrosswordSolutionStatus
     {
         Solved,
         IncorrectCrossword,

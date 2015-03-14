@@ -7,11 +7,11 @@ namespace JapaneseCrossword.CrosswordSolutionUtils
     public class CrosswordSolution
     {
         public List<List<CrosswordCell>> CrosswordCells { get; private set; }
-        public SolutionStatus Status { get; private set; }
+        public CrosswordSolutionStatus Status { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public CrosswordSolution(List<List<CrosswordCell>> crosswordCells, SolutionStatus status)
+        public CrosswordSolution(List<List<CrosswordCell>> crosswordCells, CrosswordSolutionStatus status)
         {
             if (crosswordCells == null)
             {

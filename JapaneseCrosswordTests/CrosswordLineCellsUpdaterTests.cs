@@ -48,8 +48,8 @@ namespace JapaneseCrosswordTests
             yield return new object[] { "*? *??????", new CrosswordLine(1, 3, 2), "*  *** ?*?" };
             yield return new object[] { "????????????", new CrosswordLine(1, 1, 2, 4), "?????*??***?" };
             yield return new object[] { "???*??", new CrosswordLine(1, 1, 1), "?? * *" };
-            yield return new object[]{new string('?', 100), new CrosswordLine(1, 1, 1, 1), new string('?', 100)};
-            yield return new object[] {"?????*???*?", new CrosswordLine(1, 1, 1, 2), "???? * ??*?"};
+            yield return new object[] { new string('?', 100), new CrosswordLine(1, 1, 1, 1), new string('?', 100) };
+            yield return new object[] { "?????*???*?", new CrosswordLine(1, 1, 1, 2), "???? * ??*?" };
             yield return new object[] { " ?????? ???*?", new CrosswordLine(2, 2, 2, 2), " ?*??*? ** **" };
         }
 
@@ -60,11 +60,11 @@ namespace JapaneseCrosswordTests
             yield return new object[] { "* ?", new CrosswordLine(1, 2) };
             yield return new object[] { "**", new CrosswordLine(1) };
             yield return new object[] { "*??????*", new CrosswordLine(2, 2, 3) };
-            yield return new object[] { "?????*???*?*", new CrosswordLine(1, 1, 1, 2)};
+            yield return new object[] { "?????*???*?*", new CrosswordLine(1, 1, 1, 2) };
             yield return new object[] { "****?", new CrosswordLine(4, 1) };
 
         }
-        
+
         private static List<CrosswordCell> GetCellsFromString(string cells)
         {
             return cells.Select(GetCellFromChar).ToList();

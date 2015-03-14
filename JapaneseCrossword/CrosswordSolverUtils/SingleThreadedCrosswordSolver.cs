@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace JapaneseCrossword.CrosswordSolverUtils
 {
-    public class SingleThreadedCrosswordSolver : MyCrosswordSolver
+    public class SingleThreadedCrosswordSolver : CrosswordSolver
     {
-        protected override bool UpdateLines(LineType type)
+        protected override bool UpdateLines(CrosswordLineType type)
         {
             var updatesResults = new List<Tuple<int, List<CrosswordCell>>>();
             var linesForUpdating = LinesForUpdatingAtType[type];

@@ -14,12 +14,12 @@ namespace JapaneseCrossword
         {
             random = new Random();
         }
-        
+
         public Tuple<Crossword, string> Next(int minWidth, int maxWidth, int minHeight, int maxHeight)
         {
             var crosswordLines = GenerateCrosswordLines(minWidth, maxWidth, minHeight, maxHeight);
             var crossword = GetCrosswordFromLines(crosswordLines);
-            
+
             return Tuple.Create(crossword, crosswordLines.ToDelimitedString("\n"));
         }
 
@@ -50,7 +50,7 @@ namespace JapaneseCrossword
             var rows = crosswordLines.Select(line => line.Split('.').Where(s => s != "").Select(s => s.Length).ToArray())
                                 .Select(blocks => new CrosswordLine(blocks))
                                 .ToList();
-            
+
             var columns = Enumerable.Range(0, width)
                                     .Select(y => crosswordLines.Select(row => row[y]).ToDelimitedString(""))
                                     .Select(line => line.Split('.').Where(s => s != "").Select(s => s.Length).ToArray())
