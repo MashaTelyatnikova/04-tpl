@@ -32,7 +32,7 @@ namespace JapaneseCrossword
             try
             {
                 var crossword = new CrosswordBuilder().BuildFromFile(inputFile);
-                var multiThreadedCrosswordSolver = new SingleThreadedCrosswordSolver();
+                var multiThreadedCrosswordSolver = new MultiThreadedCrosswordSolver();
                 var crosswordSolution = multiThreadedCrosswordSolver.Solve(crossword);
 
                 if (crosswordSolution.Status == CrosswordSolutionStatus.IncorrectCrossword)

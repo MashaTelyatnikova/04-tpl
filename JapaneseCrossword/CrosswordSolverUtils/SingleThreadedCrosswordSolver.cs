@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace JapaneseCrossword.CrosswordSolverUtils
+﻿namespace JapaneseCrossword.CrosswordSolverUtils
 {
     public class SingleThreadedCrosswordSolver : CrosswordSolver
     {
-        protected override bool UpdateLines(CrosswordLineType type)
+        protected override bool TryUpdateLines()
+        {
+            var rowsResult = UpdateLines(CrosswordLineType.Row);
+            var columnsResult = UpdateLines(CrosswordLineType.Column);
+            
+            return rowsResult && columnsResult;
+        }
+
+        private bool UpdateLines(CrosswordLineType type)
         {
             var linesForUpdating = LinesForUpdatingAtType[type];
 
@@ -20,10 +24,10 @@ namespace JapaneseCrossword.CrosswordSolverUtils
                     var line = GetCrosswordLine(type, i);
                     var updater = new CrosswordLineCellsUpdater(rowCells, line);
                     var updatedCells = updater.GetUpdatedCells();
-                    
+
                     if (updatedCells == null)
                         return false;
-                    
+
                     UpdateLine(type, i, updatedCells);
                 }
             }

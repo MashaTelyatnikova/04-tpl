@@ -66,15 +66,16 @@ namespace JapaneseCrosswordTests
             }
         }
 
-        [TestCase(1, 10, 1, 10)]
-        [TestCase(5, 15, 5, 15)]
-        [TestCase(12, 13, 12, 13)]
-        public void RandomCrosswordsTest(int minWidth, int maxWidth, int minHeight, int maxHeight)
+        [TestCase(1, 10, 1, 10, 0.5)]
+        [TestCase(5, 15, 5, 15, 0.5)]
+        [TestCase(12, 13, 12, 13, 0.5)]
+        [TestCase(10, 11, 10, 11, 0.38)]
+        public void RandomCrosswordsTest(int minWidth, int maxWidth, int minHeight, int maxHeight, double fillingCellProbability)
         {
             var crosswordGenerator = new CrosswordGenerator();
             for (var i = 0; i < 1000; ++i)
             {
-                var randomCrossword = crosswordGenerator.Next(minWidth, maxWidth, minHeight, maxHeight);
+                var randomCrossword = crosswordGenerator.Next(minWidth, maxWidth, minHeight, maxHeight, fillingCellProbability);
                 var crossword = randomCrossword.Item1;
                 var answer = randomCrossword.Item2;
                 foreach (var actualSolution in crosswordSolvers.Select(solver => solver.Solve(crossword)))

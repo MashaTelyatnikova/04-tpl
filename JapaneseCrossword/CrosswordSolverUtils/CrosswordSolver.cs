@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using JapaneseCrossword.CrosswordSolutionUtils;
-using MoreLinq;
 
 namespace JapaneseCrossword.CrosswordSolverUtils
 {
@@ -18,10 +16,7 @@ namespace JapaneseCrossword.CrosswordSolverUtils
 
             while (ExistsLinesForUpdating())
             {
-                var rowsResult = UpdateLines(CrosswordLineType.Row);
-                var columnsResult = UpdateLines(CrosswordLineType.Column);
-
-                if (!rowsResult || !columnsResult)
+                if (!TryUpdateLines())
                 {
                     return new CrosswordSolution(Enumerable.Empty<List<CrosswordCell>>().ToList(),
                        CrosswordSolutionStatus.IncorrectCrossword);
@@ -49,7 +44,7 @@ namespace JapaneseCrossword.CrosswordSolverUtils
                    LinesForUpdatingAtType[CrosswordLineType.Column].Any(i => i);
         }
 
-        protected abstract bool UpdateLines(CrosswordLineType type);
+        protected abstract bool TryUpdateLines();
 
         protected void UpdateLine(CrosswordLineType type, int lineNumber, List<CrosswordCell> updatedCells)
         {

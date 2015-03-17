@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using JapaneseCrossword;
-using JapaneseCrossword.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordSolverUtils;
 
 namespace CrosswordSolversComparer
