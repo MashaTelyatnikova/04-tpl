@@ -50,22 +50,24 @@ namespace JapaneseCrossword.CrosswordSolverUtils
         }
 
         protected abstract bool UpdateLines(CrosswordLineType type);
-        
-        protected void UpdateLine(CrosswordLineType type, int lineNumber, List<CrosswordCell> cells)
+
+        protected void UpdateLine(CrosswordLineType type, int lineNumber, List<CrosswordCell> updatedCells)
         {
-            var invertedLineType = type == CrosswordLineType.Row ? CrosswordLineType.Column : CrosswordLineType.Row;
-
-            var oldCells = GetLineCells(type, lineNumber).Select((cell, column) => Tuple.Create(cell, column)).ToList();
-            var newCells = cells.Select((cell, column) => Tuple.Create(cell, column)).ToList();
-
-            newCells.Except(oldCells).ForEach(tuple =>
+            var oldCells = GetLineCells(type, lineNumber);
+            for (var i = 0; i < oldCells.Count; ++i)
             {
-                LinesForUpdatingAtType[invertedLineType][tuple.Item2] = true;
+                if (oldCells[i] == updatedCells[i]) continue;
                 if (type == CrosswordLineType.Row)
-                    crosswordField[lineNumber, tuple.Item2] = newCells[tuple.Item2].Item1;
+                {
+                    LinesForUpdatingAtType[CrosswordLineType.Column][i] = true;
+                    crosswordField[lineNumber, i] = updatedCells[i];
+                }
                 else
-                    crosswordField[tuple.Item2, lineNumber] = newCells[tuple.Item2].Item1;
-            });
+                {
+                    LinesForUpdatingAtType[CrosswordLineType.Row][i] = true;
+                    crosswordField[i, lineNumber] = updatedCells[i];
+                }
+            }
         }
 
         protected List<CrosswordCell> GetLineCells(CrosswordLineType type, int number)

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JapaneseCrossword.CrosswordBuilderUtils;
 using JapaneseCrossword.CrosswordSolutionUtils;
 using JapaneseCrossword.CrosswordSolverUtils;
@@ -30,13 +32,13 @@ namespace JapaneseCrossword
             try
             {
                 var crossword = new CrosswordBuilder().BuildFromFile(inputFile);
-                var multiThreadedCrosswordSolver = new MultiThreadedCrosswordSolver();
+                var multiThreadedCrosswordSolver = new SingleThreadedCrosswordSolver();
                 var crosswordSolution = multiThreadedCrosswordSolver.Solve(crossword);
 
                 if (crosswordSolution.Status == CrosswordSolutionStatus.IncorrectCrossword)
                 {
                     Console.WriteLine("Incorrect Crossword =(");
-                    
+
                     Environment.Exit(0);
                 }
 

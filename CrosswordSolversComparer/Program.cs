@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using JapaneseCrossword;
 using JapaneseCrossword.CrosswordSolverUtils;
 
 namespace CrosswordSolversComparer
 {
-    public class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
@@ -54,7 +52,7 @@ namespace CrosswordSolversComparer
             File.WriteAllLines("multi.csv", multi);
         }
 
-        public static double TestSolver(ICrosswordSolver solver, Crossword crossword)
+        private static double TestSolver(ICrosswordSolver solver, Crossword crossword)
         {
             var stopwatch = new Stopwatch();
             GC.Collect();

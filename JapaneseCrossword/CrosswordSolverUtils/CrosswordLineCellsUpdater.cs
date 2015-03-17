@@ -98,7 +98,6 @@ namespace JapaneseCrossword.CrosswordSolverUtils
         private bool AfterBlockExistsFilledCells(int start, int blockNumber)
         {
             var blockLength = line.GetBlockLength(blockNumber);
-
             return blockLength > 0 && lineCells.Slice(start + blockLength, lineCells.Count).Contains(CrosswordCell.Filled);
         }
 
