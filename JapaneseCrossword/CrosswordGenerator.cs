@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MoreLinq;
-
+using MathNet.Numerics.Random;
 namespace JapaneseCrossword
 {
     public class CrosswordGenerator
@@ -15,15 +15,15 @@ namespace JapaneseCrossword
             random = new Random();
         }
 
-        public Tuple<Crossword, string> Next(int minWidth, int maxWidth, int minHeight, int maxHeight)
+        public Tuple<Crossword, string> Next(int minWidth, int maxWidth, int minHeight, int maxHeight, double fillingCellProbability = 0.5)
         {
-            var crosswordLines = GenerateCrosswordLines(minWidth, maxWidth, minHeight, maxHeight);
+            var crosswordLines = GenerateCrosswordLines(minWidth, maxWidth, minHeight, maxHeight, fillingCellProbability);
             var crossword = GetCrosswordFromLines(crosswordLines);
 
             return Tuple.Create(crossword, crosswordLines.ToDelimitedString("\n"));
         }
 
-        private List<string> GenerateCrosswordLines(int minWidth, int maxWidth, int minHeight, int maxHeight)
+        private List<string> GenerateCrosswordLines(int minWidth, int maxWidth, int minHeight, int maxHeight, double fillingCellProbability)
         {
             var width = random.Next(minWidth, maxWidth);
             var height = random.Next(minHeight, maxHeight);
@@ -33,7 +33,9 @@ namespace JapaneseCrossword
                 var row = new StringBuilder();
                 for (var y = 0; y < width; ++y)
                 {
-                    row.Append(random.Next(0, 2) == 0 ? '.' : '*');
+                    var next = random.NextDouble();
+                 
+                    row.Append(next < fillingCellProbability ? '*' : '.');
                 }
 
                 crosswordLines.Add(row.ToString());
