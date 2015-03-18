@@ -17,14 +17,8 @@ namespace JapaneseCrossword.CrosswordSolverUtils
 
             if (taskSolutions.Any(taskSolution => taskSolution.Cells == null))
                 return false;
-            
-            foreach (var solution in taskSolutions.Where(solution => solution.LineType == CrosswordLineType.Row))
-            {
-                LinesForUpdatingAtType[solution.LineType][solution.LineNumber] = false;
-                UpdateLine(solution.LineType, solution.LineNumber, solution.Cells);
-            }
 
-            foreach (var solution in taskSolutions.Where(solution => solution.LineType == CrosswordLineType.Column))
+            foreach (var solution in taskSolutions)
             {
                 LinesForUpdatingAtType[solution.LineType][solution.LineNumber] = false;
                 UpdateLine(solution.LineType, solution.LineNumber, solution.Cells);
@@ -42,7 +36,6 @@ namespace JapaneseCrossword.CrosswordSolverUtils
             {
                 if (linesForUpdating[number])
                 {
-                    linesForUpdating[number] = false;
                     var localNumber = number;
                     tasks.Add(Task.Run(() =>
                     {
