@@ -1,41 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ProxyServer
 {
     public class GrayList
     {
         private readonly Dictionary<string, DateTime> elements;
-        private readonly int timeout;
-        public GrayList(int timeout)
+        private readonly int residenceTimeInsideInMinutes;
+
+        public GrayList(int residenceTimeInsideInMinutes)
         {
             elements = new Dictionary<string, DateTime>();
-            this.timeout = timeout;
+            this.residenceTimeInsideInMinutes = residenceTimeInsideInMinutes;
         }
 
-        public void Add(string element)
+        public void AddRecord(string record)
         {
-            elements[element] = DateTime.Now;
+            elements[record] = DateTime.Now;
         }
 
-        public bool Contais(string element)
+        public bool ContainsRecord(string record)
         {
-            if (!elements.ContainsKey(element))
+            if (!elements.ContainsKey(record))
             {
                 return false;
             }
 
-            var date = elements[element];
-            var current = DateTime.Now;
+            var lastUpload = elements[record];
+            var currentTime = DateTime.Now;
 
-            var dif = current.Subtract(date);
-            if (dif.TotalSeconds > timeout * 60)
+            var elapsed = currentTime.Subtract(lastUpload);
+            if (elapsed.TotalSeconds > residenceTimeInsideInMinutes * 60)
             {
-                elements.Remove(element);
+                elements.Remove(record);
                 return false;
             }
             return true;

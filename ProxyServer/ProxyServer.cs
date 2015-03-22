@@ -90,14 +90,14 @@ namespace ProxyServer
 
         private async Task<string> GetAnswerFromReplica(string query)
         {
-            var mixedReplicas = serversReplicas.Where(replica => !grayList.Contais(replica)).ToArray().Shuffle();
+            var mixedReplicas = serversReplicas.Where(replica => !grayList.ContainsRecord(replica)).ToArray().Shuffle();
 
             foreach (var replica in mixedReplicas)
             {
                 var answer = await GetAnswerAsync(replica + query);
                 if (answer != null)
                     return answer;
-                grayList.Add(replica);
+                grayList.AddRecord(replica);
             }
 
             return null;
