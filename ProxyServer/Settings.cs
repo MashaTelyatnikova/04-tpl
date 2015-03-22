@@ -9,6 +9,7 @@ namespace ProxyServer
     {
         public int Port { get; private set; }
         public string[] ServersReplicas { get; private set; }
+        public int ResidenceTimeInGrayList { get; private set; }
 
         public Settings(string settingsFilename)
         {
@@ -19,6 +20,7 @@ namespace ProxyServer
 
             Port = GetPort(lines);
             ServersReplicas = GetServersReplicas(lines);
+            ResidenceTimeInGrayList = GetResidenceTimeInGrayList(lines);
         }
 
         private static int GetPort(IEnumerable<string[]> lines)
@@ -31,6 +33,12 @@ namespace ProxyServer
         {
             var replicasLine = lines.FirstOrDefault(line => line[0].Equals("ServersReplicas", StringComparison.InvariantCultureIgnoreCase));
             return replicasLine[1].Split(',').ToArray();
+        }
+
+        private static int GetResidenceTimeInGrayList(IEnumerable<string[]> lines)
+        {
+            var rezidenceTimeLine = lines.FirstOrDefault(line => line[0].Equals("ResidenceTime", StringComparison.InvariantCultureIgnoreCase));
+            return int.Parse(rezidenceTimeLine[1]);
         }
     }
 }

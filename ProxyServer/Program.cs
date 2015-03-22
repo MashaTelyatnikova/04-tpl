@@ -1,4 +1,6 @@
-﻿namespace ProxyServer
+﻿using System;
+
+namespace ProxyServer
 {
     public class Program
     {
@@ -6,7 +8,7 @@
         {
             var settings = new Settings("settings.txt");
 
-            var server = new ProxyServer(settings.Port, settings.ServersReplicas);
+            var server = new ProxyServer(settings);
             server.Run();
         }
     }

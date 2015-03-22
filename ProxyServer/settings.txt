@@ -1,2 +1,3 @@
 Port 20001
 ServersReplicas http://127.0.0.1:30000/method,http://127.0.0.1:30001/method
+ResidenceTime 5

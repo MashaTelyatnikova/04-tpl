@@ -14,12 +14,13 @@ namespace ProxyServer
         private readonly ConcurrentDictionary<string, string> cache;
         private readonly string[] serversReplicas;
         private const int Timeout = 2000;
+        private readonly GrayList grayList;
 
-        public ProxyServer(int port, string[] serversReplicas)
+        public ProxyServer(Settings settings)
         {
-            this.serversReplicas = serversReplicas;
-
-            listener = new Listener(port, null, HandleRequest);
+            serversReplicas = settings.ServersReplicas;
+            grayList = new GrayList(settings.ResidenceTimeInGrayList);
+            listener = new Listener(settings.Port, null, HandleRequest);
             cache = new ConcurrentDictionary<string, string>();
         }
 
@@ -89,12 +90,14 @@ namespace ProxyServer
 
         private async Task<string> GetAnswerFromReplica(string query)
         {
-            var mixedReplicas = serversReplicas.Shuffle();
+            var mixedReplicas = serversReplicas.Where(replica => !grayList.Contais(replica)).ToArray().Shuffle();
+
             foreach (var replica in mixedReplicas)
             {
                 var answer = await GetAnswerAsync(replica + query);
                 if (answer != null)
                     return answer;
+                grayList.Add(replica);
             }
 
             return null;

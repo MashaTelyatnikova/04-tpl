@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ByteArrayExtensions.cs" />
+    <Compile Include="GrayList.cs" />
     <Compile Include="HttpListenerRequestExtensions.cs" />
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="Listener.cs" />
