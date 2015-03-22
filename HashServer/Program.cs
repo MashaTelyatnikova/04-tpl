@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -16,11 +17,10 @@ namespace HashServer
 			XmlConfigurator.Configure();
 			try
 			{
+			    var port = int.Parse(args[0]);
+                Console.WriteLine(port);
 				var listener = new Listener(port, "method", OnContextAsync);
 				listener.Start();
-
-				var listenerSync = new ListenerSync(port, "methodSync", OnContext);
-				listenerSync.Start();
 
 				log.InfoFormat("Server started!");
 				new ManualResetEvent(false).WaitOne();
@@ -75,7 +75,6 @@ namespace HashServer
 				return hasher.ComputeHash(data);
 		}
 
-		private const int port = 20000;
 		private static readonly byte[] Key = Encoding.UTF8.GetBytes("Контур.Шпора");
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 	}
