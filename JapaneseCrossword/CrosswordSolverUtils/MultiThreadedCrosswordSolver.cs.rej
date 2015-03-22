@@ -1,0 +1,17 @@
+diff a/JapaneseCrossword/CrosswordSolverUtils/MultiThreadedCrosswordSolver.cs b/JapaneseCrossword/CrosswordSolverUtils/MultiThreadedCrosswordSolver.cs	(rejected hunks)
+@@ -17,14 +17,8 @@
+ 
+             if (taskSolutions.Any(taskSolution => taskSolution.Cells == null))
+                 return false;
+-            
+-            foreach (var solution in taskSolutions.Where(solution => solution.LineType == CrosswordLineType.Row))
+-            {
+-                LinesForUpdatingAtType[solution.LineType][solution.LineNumber] = false;
+-                UpdateLine(solution.LineType, solution.LineNumber, solution.Cells);
+-            }
+ 
+-            foreach (var solution in taskSolutions.Where(solution => solution.LineType == CrosswordLineType.Column))
++            foreach (var solution in taskSolutions)
+             {
+                 LinesForUpdatingAtType[solution.LineType][solution.LineNumber] = false;
+                 UpdateLine(solution.LineType, solution.LineNumber, solution.Cells);
