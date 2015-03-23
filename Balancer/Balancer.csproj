@@ -69,7 +69,7 @@
     <Compile Include="Listener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProxyServer.cs" />
+    <Compile Include="Balancer.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashServer", "HashServer\Ha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patterns", "Patterns\Patterns.csproj", "{9C249655-CDD8-4D41-B007-61D3716C8B92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyServer", "ProxyServer\ProxyServer.csproj", "{5611E033-7CE7-465E-B2FC-5D864CD3CA1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balancer", "Balancer\Balancer.csproj", "{5611E033-7CE7-465E-B2FC-5D864CD3CA1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
