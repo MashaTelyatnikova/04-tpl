@@ -15,7 +15,7 @@ namespace Balancer
         private readonly ConcurrentDictionary<string, string> cache;
         private readonly string[] serversReplicas;
         private const int Timeout = 2000;
-        private const string Prefix = "method";
+        private const string Suffix = "method";
         private readonly GrayList grayList;
         private const int ErrorStatusCode = 500;
         private const int SuccessStatusCode = 200;
@@ -24,7 +24,7 @@ namespace Balancer
         {
             serversReplicas = settings.ServersReplicas;
             grayList = new GrayList(settings.ResidenceTimeInGrayList);
-            listener = new Listener(settings.Port, Prefix, HandleRequest);
+            listener = new Listener(settings.Port, Suffix, HandleRequest);
             cache = new ConcurrentDictionary<string, string>();
         }
 
