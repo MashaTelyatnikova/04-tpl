@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 
-namespace ProxyServer
+namespace Balancer
 {
     public static class HttpListenerRequestExtensions
     {

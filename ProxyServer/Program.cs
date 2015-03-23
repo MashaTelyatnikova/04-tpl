@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ProxyServer
+﻿namespace Balancer
 {
     public class Program
     {
@@ -8,7 +6,7 @@ namespace ProxyServer
         {
             var settings = new Settings("settings.txt");
 
-            var server = new ProxyServer(settings);
+            var server = new Balancer.ProxyServer(settings);
             server.Run();
         }
     }

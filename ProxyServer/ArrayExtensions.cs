@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProxyServer
+namespace Balancer
 {
     public static class ArrayExtensions
     {

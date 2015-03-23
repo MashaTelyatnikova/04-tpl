@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProxyServer
+namespace Balancer
 {
-    public class ProxyServer
+    public class Balancer
     {
         private readonly Listener listener;
         private readonly ConcurrentDictionary<string, string> cache;
@@ -16,7 +16,7 @@ namespace ProxyServer
         private const int Timeout = 2000;
         private readonly GrayList grayList;
 
-        public ProxyServer(Settings settings)
+        public Balancer(Settings settings)
         {
             serversReplicas = settings.ServersReplicas;
             grayList = new GrayList(settings.ResidenceTimeInGrayList);

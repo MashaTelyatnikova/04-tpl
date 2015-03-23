@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProxyServer
+namespace Balancer
 {
     public class GrayList
     {

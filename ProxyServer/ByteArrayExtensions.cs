@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 
-namespace ProxyServer
+namespace Balancer
 {
     public static class ByteArrayExtensions
     {

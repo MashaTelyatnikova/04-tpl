@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 
-namespace ProxyServer
+namespace Balancer
 {
     public class Listener
     {
