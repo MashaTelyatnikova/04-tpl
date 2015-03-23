@@ -16,6 +16,7 @@ namespace Balancer
         private readonly string[] serversReplicas;
         private const int Timeout = 2000;
         private const string Suffix = "method";
+        private const string ErrorMessage = "Error";
         private readonly GrayList grayList;
         private const int ErrorStatusCode = 500;
         private const int SuccessStatusCode = 200;
@@ -62,7 +63,7 @@ namespace Balancer
             }
             else
             {
-                SendResponse("Error", ErrorStatusCode, context);
+                SendResponse(ErrorMessage, ErrorStatusCode, context);
             }
         }
 
@@ -94,7 +95,8 @@ namespace Balancer
 
         private async Task<string> GetAnswerFromReplica(Uri url)
         {
-            var workingReplicas = serversReplicas.Where(replica => !grayList.ContainsRecord(replica)).ToArray();
+            var workingReplicas = serversReplicas.Where(replica => !grayList.ContainsRecord(replica))
+                                                    .ToArray();
             if (workingReplicas.Length == 0)
             {
                 workingReplicas = serversReplicas;
