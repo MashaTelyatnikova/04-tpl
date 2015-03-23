@@ -6,8 +6,8 @@
         {
             var settings = new Settings("settings.txt");
 
-            var server = new Balancer(settings);
-            server.Run();
+            var balancer = new Balancer(settings);
+            balancer.Run();
         }
     }
 }
