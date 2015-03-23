@@ -1,22 +1,29 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Balancer
 {
     public class GrayList
     {
-        private readonly Dictionary<string, DateTime> elements;
+        private readonly ConcurrentDictionary<string, DateTime> elements;
         private readonly int residenceTimeInsideInMinutes;
 
         public GrayList(int residenceTimeInsideInMinutes)
         {
-            elements = new Dictionary<string, DateTime>();
+            elements = new ConcurrentDictionary<string, DateTime>();
             this.residenceTimeInsideInMinutes = residenceTimeInsideInMinutes;
         }
 
         public void AddRecord(string record)
         {
             elements[record] = DateTime.Now;
+        }
+
+        public void RemoveRecord(string record)
+        {
+            DateTime time;
+            elements.TryRemove(record, out time);
         }
 
         public bool ContainsRecord(string record)
@@ -32,7 +39,7 @@ namespace Balancer
             var elapsed = currentTime.Subtract(lastUpload);
             if (elapsed.TotalSeconds > residenceTimeInsideInMinutes * 60)
             {
-                elements.Remove(record);
+                RemoveRecord(record);
                 return false;
             }
             return true;

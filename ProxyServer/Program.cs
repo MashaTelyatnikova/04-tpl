@@ -6,7 +6,7 @@
         {
             var settings = new Settings("settings.txt");
 
-            var server = new Balancer.ProxyServer(settings);
+            var server = new Balancer(settings);
             server.Run();
         }
     }

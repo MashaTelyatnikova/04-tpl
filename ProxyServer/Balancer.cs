@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -14,13 +15,16 @@ namespace Balancer
         private readonly ConcurrentDictionary<string, string> cache;
         private readonly string[] serversReplicas;
         private const int Timeout = 2000;
+        private const string Prefix = "method";
         private readonly GrayList grayList;
+        private const int ErrorStatusCode = 500;
+        private const int SuccessStatusCode = 200;
 
         public Balancer(Settings settings)
         {
             serversReplicas = settings.ServersReplicas;
             grayList = new GrayList(settings.ResidenceTimeInGrayList);
-            listener = new Listener(settings.Port, null, HandleRequest);
+            listener = new Listener(settings.Port, Prefix, HandleRequest);
             cache = new ConcurrentDictionary<string, string>();
         }
 
@@ -45,7 +49,7 @@ namespace Balancer
             string result;
             if (!cache.ContainsKey(query))
             {
-                var answer = await GetAnswerFromReplica(query);
+                var answer = await GetAnswerFromReplica(request.Url);
                 if (answer != null)
                 {
                     cache.TryAdd(query, answer);
@@ -54,11 +58,11 @@ namespace Balancer
 
             if (cache.TryGetValue(query, out result))
             {
-                SendResponse(result, 200, context);
+                SendResponse(result, SuccessStatusCode, context);
             }
             else
             {
-                SendResponse("Not Found =(", 404, context);
+                SendResponse("Error", ErrorStatusCode, context);
             }
         }
 
@@ -88,15 +92,28 @@ namespace Balancer
             }
         }
 
-        private async Task<string> GetAnswerFromReplica(string query)
+        private async Task<string> GetAnswerFromReplica(Uri url)
         {
-            var mixedReplicas = serversReplicas.Where(replica => !grayList.ContainsRecord(replica)).ToArray().Shuffle();
-
-            foreach (var replica in mixedReplicas)
+            var workingReplicas = serversReplicas.Where(replica => !grayList.ContainsRecord(replica)).ToArray();
+            if (workingReplicas.Length == 0)
             {
-                var answer = await GetAnswerAsync(replica + query);
+                workingReplicas = serversReplicas;
+            }
+
+            var mixedWorkingReplicas = workingReplicas.Shuffle();
+
+            foreach (var replica in mixedWorkingReplicas)
+            {
+                var answer = await GetAnswerAsync(replica + url.AbsolutePath + url.Query);
                 if (answer != null)
+                {
+                    if (grayList.ContainsRecord(replica))
+                    {
+                        grayList.RemoveRecord(replica);
+                    }
                     return answer;
+                }
+                    
                 grayList.AddRecord(replica);
             }
 
@@ -111,7 +128,6 @@ namespace Balancer
                 webRequest.Timeout = Timeout;
                 
                 var response = await webRequest.GetResponseAsync();
-                
                 var responseStream = response.GetResponseStream();
                 var answer =  new StreamReader(responseStream).ReadToEnd();
 
