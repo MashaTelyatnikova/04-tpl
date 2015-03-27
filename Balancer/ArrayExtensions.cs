@@ -4,7 +4,7 @@ namespace Balancer
 {
     public static class ArrayExtensions
     {
-        public static T[] Shuffle<T>(this T[]array)
+        public static T[] Shuffle<T>(this T[] array)
         {
             var newArray = (T[])array.Clone();
 

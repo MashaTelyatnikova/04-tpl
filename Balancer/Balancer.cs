@@ -115,7 +115,7 @@ namespace Balancer
                     }
                     return answer;
                 }
-                    
+
                 grayList.AddRecord(replica);
             }
 
@@ -128,10 +128,10 @@ namespace Balancer
             {
                 var webRequest = WebRequest.Create(url);
                 webRequest.Timeout = Timeout;
-                
+
                 var response = await webRequest.GetResponseAsync();
                 var responseStream = response.GetResponseStream();
-                var answer =  new StreamReader(responseStream).ReadToEnd();
+                var answer = new StreamReader(responseStream).ReadToEnd();
 
                 return answer;
             }

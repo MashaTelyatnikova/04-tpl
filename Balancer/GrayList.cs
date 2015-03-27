@@ -6,9 +6,9 @@ namespace Balancer
     public class GrayList
     {
         private readonly ConcurrentDictionary<string, DateTime> elements;
-        private readonly int residenceTimeInsideInMinutes;
+        private readonly double residenceTimeInsideInMinutes;
 
-        public GrayList(int residenceTimeInsideInMinutes)
+        public GrayList(double residenceTimeInsideInMinutes)
         {
             elements = new ConcurrentDictionary<string, DateTime>();
             this.residenceTimeInsideInMinutes = residenceTimeInsideInMinutes;
@@ -36,7 +36,7 @@ namespace Balancer
             var currentTime = DateTime.Now;
 
             var elapsed = currentTime.Subtract(lastUpload);
-            if (elapsed.TotalSeconds > residenceTimeInsideInMinutes * 60)
+            if (elapsed.TotalSeconds >= residenceTimeInsideInMinutes * 60)
             {
                 RemoveRecord(record);
                 return false;

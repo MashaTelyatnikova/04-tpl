@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("Balancer")]
+[assembly: AssemblyTitle("BalancerTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("Balancer")]
+[assembly: AssemblyProduct("BalancerTests")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("d1a16588-b8be-4b9d-8009-ca0dda572cc7")]
+[assembly: Guid("23cc33a7-075b-471b-9935-c79dddb81523")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //
