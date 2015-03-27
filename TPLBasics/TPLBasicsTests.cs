@@ -70,7 +70,7 @@ namespace TPLBasics
 					Thread.SpinWait(500000);
 					Console.WriteLine("Nested task completing.");
 				}, TaskCreationOptions.AttachedToParent);
-			}/*, TaskCreationOptions.DenyChildAttach*/);
+			}, TaskCreationOptions.DenyChildAttach);
 
 			parent.Wait();
 			Console.WriteLine("Outer has completed.");

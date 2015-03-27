@@ -9,7 +9,8 @@ namespace Balancer
     {
         public int Port { get; private set; }
         public string[] ServersReplicas { get; private set; }
-        public int ResidenceTimeInGrayList { get; private set; }
+        public double ResidenceTimeInGrayList { get; private set; }
+        public int ReplicaAnswerTimeout { get; private set; }
 
         public Settings(string settingsFilename)
         {
@@ -21,6 +22,15 @@ namespace Balancer
             Port = GetPort(lines);
             ServersReplicas = GetServersReplicas(lines);
             ResidenceTimeInGrayList = GetResidenceTimeInGrayList(lines);
+            ReplicaAnswerTimeout = GetReplicaAnswerTimeout(lines);
+        }
+
+        public Settings(int port, string[] replicas, double residenceTimeInGrayList, int replicaAnswerTimeout)
+        {
+            Port = port;
+            ServersReplicas = replicas;
+            ResidenceTimeInGrayList = residenceTimeInGrayList;
+            ReplicaAnswerTimeout = replicaAnswerTimeout;
         }
 
         private static int GetPort(IEnumerable<string[]> lines)
@@ -35,9 +45,15 @@ namespace Balancer
             return replicasLine[1].Split(',').ToArray();
         }
 
-        private static int GetResidenceTimeInGrayList(IEnumerable<string[]> lines)
+        private static double GetResidenceTimeInGrayList(IEnumerable<string[]> lines)
         {
             var rezidenceTimeLine = lines.FirstOrDefault(line => line[0].Equals("ResidenceTime", StringComparison.InvariantCultureIgnoreCase));
+            return double.Parse(rezidenceTimeLine[1]);
+        }
+
+        private static int GetReplicaAnswerTimeout(IEnumerable<string[]> lines)
+        {
+            var rezidenceTimeLine = lines.FirstOrDefault(line => line[0].Equals("ReplicaAnswerTimeout", StringComparison.InvariantCultureIgnoreCase));
             return int.Parse(rezidenceTimeLine[1]);
         }
     }

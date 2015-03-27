@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Balancer
@@ -14,7 +13,7 @@ namespace Balancer
         private readonly Listener listener;
         private readonly ConcurrentDictionary<string, string> cache;
         private readonly string[] serversReplicas;
-        private const int Timeout = 2000;
+        private readonly int replicaAnswerTimeout;
         private const string Suffix = "method";
         private const string ErrorMessage = "Error";
         private readonly GrayList grayList;
@@ -23,6 +22,7 @@ namespace Balancer
 
         public Balancer(Settings settings)
         {
+            replicaAnswerTimeout = settings.ReplicaAnswerTimeout;
             serversReplicas = settings.ServersReplicas;
             grayList = new GrayList(settings.ResidenceTimeInGrayList);
             listener = new Listener(settings.Port, Suffix, HandleRequest);
@@ -34,13 +34,16 @@ namespace Balancer
             try
             {
                 listener.Start();
-
-                new ManualResetEvent(false).WaitOne();
             }
             catch
             {
                 //
             }
+        }
+
+        public void Stop()
+        {
+            listener.Stop();
         }
 
         private async Task HandleRequest(HttpListenerContext context)
@@ -122,12 +125,12 @@ namespace Balancer
             return null;
         }
 
-        private static async Task<string> GetAnswerAsync(string url)
+        private async Task<string> GetAnswerAsync(string url)
         {
             try
             {
                 var webRequest = WebRequest.Create(url);
-                webRequest.Timeout = Timeout;
+                webRequest.Timeout = replicaAnswerTimeout;
 
                 var response = await webRequest.GetResponseAsync();
                 var responseStream = response.GetResponseStream();

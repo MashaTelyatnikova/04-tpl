@@ -1,4 +1,7 @@
-﻿namespace Balancer
+﻿using System;
+using System.Threading;
+
+namespace Balancer
 {
     public class Program
     {
@@ -8,6 +11,7 @@
 
             var balancer = new Balancer(settings);
             balancer.Run();
+            new ManualResetEvent(false).WaitOne();
         }
     }
 }

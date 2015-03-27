@@ -1,38 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 
-namespace Balancer
+namespace Listener
 {
     public class Listener
     {
-        private HttpListener listener;
+        private readonly HttpListener listener;
         private Func<HttpListenerContext, Task> CallbackAsync { get; set; }
-        private string prefix;
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 
         public Listener(int port, string suffix, Func<HttpListenerContext, Task> callbackAsync)
         {
-            prefix = string.Format("http://+:{0}{1}/", port, suffix != null ? "/" + suffix.TrimStart('/') : "");
-            listener = new HttpListener();
-            listener.Prefixes.Add(prefix);
-            ThreadPool.SetMinThreads(32, 32);
+            ThreadPool.SetMinThreads(8, 8);
             CallbackAsync = callbackAsync;
-            
+            listener = new HttpListener();
+            listener.Prefixes.Add(string.Format("http://+:{0}{1}/", port, suffix != null ? "/" + suffix.TrimStart('/') : ""));
         }
 
         public void Start()
         {
             listener.Start();
             StartListen();
-        }
-
-        public void Stop()
-        {
-            if (listener != null)
-                listener.Close();
         }
 
         public async void StartListen()
