@@ -132,11 +132,15 @@ namespace Balancer
                 var webRequest = WebRequest.Create(url);
                 webRequest.Timeout = replicaAnswerTimeout;
 
-                var response = await webRequest.GetResponseAsync();
-                var responseStream = response.GetResponseStream();
-                var answer = new StreamReader(responseStream).ReadToEnd();
+                using (var response = await webRequest.GetResponseAsync())
+                {
+                    using (var responseStream = response.GetResponseStream())
+                    {
+                        var answer = new StreamReader(responseStream).ReadToEnd();
 
-                return answer;
+                        return answer;
+                    }
+                }
             }
             catch (WebException)
             {

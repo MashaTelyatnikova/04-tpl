@@ -126,13 +126,15 @@ namespace BalancerTests
         {
             var webRequest = WebRequest.Create(request);
             webRequest.Timeout = 10000;
-            var response = webRequest.GetResponse();
+            using (var response = webRequest.GetResponse())
+            {
+                using (var responseStream = response.GetResponseStream())
+                {
+                    var actualResponse = new StreamReader(responseStream).ReadToEnd();
 
-            var responseStream = response.GetResponseStream();
-            var actualResponse = new StreamReader(responseStream).ReadToEnd();
-
-            Assert.That(actualResponse, Is.EqualTo(expectedResponse));
-
+                    Assert.That(actualResponse, Is.EqualTo(expectedResponse));
+                }
+            }
         }
 
         private static void CheckRequestSupportCompression(string request, string expectedResponse)
@@ -141,17 +143,19 @@ namespace BalancerTests
             webRequest.Headers["Accept-Encoding"] = "deflate";
             webRequest.Timeout = 10000;
 
-            var response = webRequest.GetResponse();
+            using (var response = webRequest.GetResponse())
+            {
+                Assert.That(response.Headers["Content-Encoding"].Contains("deflate"), Is.True);
 
-            Assert.That(response.Headers["Content-Encoding"].Contains("deflate"), Is.True);
+                using (var responseStream = response.GetResponseStream())
+                {
+                    var answer = new StreamReader(responseStream).ReadToEnd();
+                    var actualDecompessedResponse = Encoding.UTF8.GetString(
+                        Encoding.UTF8.GetBytes(answer).DecompressByDeflate());
 
-            var responseStream = response.GetResponseStream();
-            var answer = new StreamReader(responseStream).ReadToEnd();
-            var actualDecompessedResponse = Encoding.UTF8.GetString(
-                Encoding.UTF8.GetBytes(answer).DecompressByDeflate());
-
-            Assert.That(actualDecompessedResponse, Is.EqualTo(expectedResponse));
-
+                    Assert.That(actualDecompessedResponse, Is.EqualTo(expectedResponse));
+                }
+            }
         }
     }
 }
