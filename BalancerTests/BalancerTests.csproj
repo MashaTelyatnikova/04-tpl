@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="ArrayExtensionsTests.cs" />
     <Compile Include="Balancer_should.cs" />
+    <Compile Include="ByteArrayExtensionsTests.cs" />
     <Compile Include="GrayListTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

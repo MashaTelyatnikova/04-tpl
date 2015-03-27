@@ -36,6 +36,20 @@ namespace Balancer
             }
         }
 
+        public static byte[] DecompressByGzip(this byte[] source)
+        {
+            using (var memory = new MemoryStream(source))
+            {
+                using (var gZipStream = new GZipStream(memory, CompressionMode.Decompress, true))
+                {
+                    using (var reader = new StreamReader(gZipStream, System.Text.Encoding.UTF8))
+                    {
+                        return Encoding.UTF8.GetBytes(reader.ReadToEnd());
+                    }
+                }
+            }
+        }
+
         public static byte[] CompressByGzip(this byte[] source)
         {
             byte[] result;
