@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,7 +12,6 @@ namespace Balancer
     public class Balancer
     {
         private readonly Listener listener;
-        private readonly ConcurrentDictionary<string, string> cache;
         private readonly string[] serversReplicas;
         private readonly int replicaAnswerTimeout;
         private const string Suffix = "method";
@@ -19,14 +19,12 @@ namespace Balancer
         private readonly GrayList grayList;
         private const int ErrorStatusCode = 500;
         private const int SuccessStatusCode = 200;
-
         public Balancer(Settings settings)
         {
             replicaAnswerTimeout = settings.ReplicaAnswerTimeout;
             serversReplicas = settings.ServersReplicas;
             grayList = new GrayList(settings.ResidenceTimeInGrayList);
             listener = new Listener(settings.Port, Suffix, HandleRequest);
-            cache = new ConcurrentDictionary<string, string>();
         }
 
         public void Run()
@@ -49,19 +47,10 @@ namespace Balancer
         private async Task HandleRequest(HttpListenerContext context)
         {
             var request = context.Request;
-            var query = request.Url.Query;
-            string result;
-            if (!cache.ContainsKey(query))
+            var result = await TryGetAnswerFromRandomReplica(request.Url);
+            if (result != null)
             {
-                var answer = await GetAnswerFromReplica(request.Url);
-                if (answer != null)
-                {
-                    cache.TryAdd(query, answer);
-                }
-            }
 
-            if (cache.TryGetValue(query, out result))
-            {
                 SendResponse(result, SuccessStatusCode, context);
             }
             else
@@ -96,7 +85,7 @@ namespace Balancer
             }
         }
 
-        private async Task<string> GetAnswerFromReplica(Uri url)
+        private async Task<string> TryGetAnswerFromRandomReplica(Uri requestUrl)
         {
             var workingReplicas = serversReplicas.Where(replica => !grayList.ContainsRecord(replica))
                                                     .ToArray();
@@ -109,7 +98,7 @@ namespace Balancer
 
             foreach (var replica in mixedWorkingReplicas)
             {
-                var answer = await GetAnswerAsync(replica + url.AbsolutePath + url.Query);
+                var answer = await GetAnswerAsync(replica + requestUrl.AbsolutePath + requestUrl.Query);
                 if (answer != null)
                 {
                     if (grayList.ContainsRecord(replica))
@@ -127,25 +116,46 @@ namespace Balancer
 
         private async Task<string> GetAnswerAsync(string url)
         {
-            try
+            var tasks = new List<Task>();
+            string answer = null;
+            tasks.Add(Task.Run(async ()=> 
             {
-                var webRequest = WebRequest.Create(url);
-                webRequest.Timeout = replicaAnswerTimeout;
-
-                using (var response = await webRequest.GetResponseAsync())
+                try
                 {
-                    using (var responseStream = response.GetResponseStream())
-                    {
-                        var answer = new StreamReader(responseStream).ReadToEnd();
+                    var webRequest = CreateRequest(url, replicaAnswerTimeout);
 
-                        return answer;
+                    using (var response = await webRequest.GetResponseAsync())
+                    {
+                        using (var responseStream = response.GetResponseStream())
+                        {
+                            answer = new StreamReader(responseStream).ReadToEnd();
+                        }
                     }
                 }
-            }
-            catch (WebException)
-            {
-                return null;
-            }
+                catch (WebException)
+                {
+                    answer = null;
+                }
+            }));
+            
+            tasks.Add(Task.Delay(replicaAnswerTimeout));
+           
+            await Task.WhenAny(tasks);
+            return answer;
+        }
+
+
+        private static HttpWebRequest CreateRequest(string uriStr, int timeout)
+        {
+            var request = WebRequest.CreateHttp(uriStr);
+            request.Proxy = null;
+            request.Timeout = timeout;
+            request.KeepAlive = true;
+            request.ServicePoint.UseNagleAlgorithm = false;
+            request.ServicePoint.ConnectionLimit = 100;
+            
+            return request;
         }
     }
 }
+
