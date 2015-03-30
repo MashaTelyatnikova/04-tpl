@@ -117,7 +117,6 @@ namespace Balancer
         private async Task<string> GetAnswerAsync(string url)
         {
             var tasks = new List<Task>();
-            string answer = null;
             tasks.Add(Task.Run(async ()=> 
             {
                 try
@@ -128,20 +127,20 @@ namespace Balancer
                     {
                         using (var responseStream = response.GetResponseStream())
                         {
-                            answer = new StreamReader(responseStream).ReadToEnd();
+                            return new StreamReader(responseStream).ReadToEnd();
                         }
                     }
                 }
                 catch (WebException)
                 {
-                    answer = null;
+                    return null;
                 }
             }));
             
             tasks.Add(Task.Delay(replicaAnswerTimeout));
            
-            await Task.WhenAny(tasks);
-            return answer;
+            var taskId = Task.WaitAny(tasks.ToArray());
+            return taskId == 0 ? ((Task<string>) tasks[0]).Result : null;
         }
 
 

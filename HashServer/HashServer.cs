@@ -13,9 +13,12 @@ namespace HashServerUtils
         private static readonly byte[] Key = Encoding.UTF8.GetBytes("Контур.Шпора");
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
         private int port;
-        public HashServer(int port)
+        private int timeout;
+
+        public HashServer(int port, int timeout = 0)
         {
             this.port = port;
+            this.timeout = timeout;
             listener = new Listener(port, "method", OnContextAsync);
         }
 
@@ -36,7 +39,7 @@ namespace HashServerUtils
             listener.Stop();
         }
 
-        private static async Task OnContextAsync(HttpListenerContext context)
+        private  async Task OnContextAsync(HttpListenerContext context)
         {
             var requestId = Guid.NewGuid();
             var query = context.Request.QueryString["query"];
@@ -44,9 +47,7 @@ namespace HashServerUtils
             log.InfoFormat("{0}: received {1} from {2}", requestId, query, remoteEndPoint);
             context.Request.InputStream.Close();
 
-            await Task.Delay(1000);
-            //			Thread.Sleep(1000);
-
+            await Task.Delay(timeout);
             var encryptedBytes = Encoding.UTF8.GetBytes(query);
             await context.Response.OutputStream.WriteAsync(encryptedBytes, 0, encryptedBytes.Length);
             context.Response.OutputStream.Close();
